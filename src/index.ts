@@ -1,8 +1,15 @@
 import {
-	EnumFindBracketsAction, IBrackets, IBracketsInput, IBracketsMap, IBracketsObject,
+	EnumFindBracketsAction,
+	IBrackets,
+	IBracketsInput,
+	IBracketsMap,
+	IBracketsObject,
 	ICheckParams,
 	IIncludeSeparatorMode,
-	IMention, IParametersSplitSmartly, IParametersSplitSmartlyReturnQuery, IParametersSplitSmartlyReturnResult,
+	IMention,
+	IParametersSplitSmartly,
+	IParametersSplitSmartlyReturnQuery,
+	IParametersSplitSmartlyReturnResult,
 	IGetPipeItemByIncludeSeparatorMode,
 	IGetIncludeSeparatorModeBySettings,
 	IGetPipeItemBySettings,
@@ -13,7 +20,10 @@ import {
 	ISplitSettings,
 	ISplitSettingsInput,
 	ITextNodeBase,
-	ITextNodeOrText, ISplitFunction, ISplitFunctionCore,
+	ITextNodeOrText,
+	ISplitFunction,
+	ISplitFunctionCore,
+	IParameterSeparator, IReturnTypeCheckSeparator,
 } from "./types"
 
 const prepareSearch = <M extends IIncludeSeparatorMode>(separators: ISeparators, settings: ISplitSettingsInput<M>) =>
@@ -190,7 +200,9 @@ const prepareSearch = <M extends IIncludeSeparatorMode>(separators: ISeparators,
 
 prepareSearch.screenedSymbols = void 0 as Set<string>
 
-const getSplitSmartlyArgs = <M extends IIncludeSeparatorMode, M2 extends IIncludeSeparatorMode = M>(args: IParametersSplitSmartly<M>, extraSettings?: ISplitSettingsInput<M2>) =>
+const getSplitSmartlyArgs = <M extends IIncludeSeparatorMode, M2 extends IIncludeSeparatorMode = M>(args: IParametersSplitSmartly<M>,
+	extraSettings?: ISplitSettingsInput<M2>,
+) =>
 {
 	if (args.length === 3)
 	{
@@ -356,7 +368,7 @@ export const createSplitFunction = <M extends IIncludeSeparatorMode>(settings: I
 export class SearchResults<M extends IIncludeSeparatorMode, T extends IGetPipeItemByIncludeSeparatorMode<IIncludeSeparatorMode> = IGetPipeItemBySettings<ISearchSettingsInput<M>>>
 {
 
-	brackets: any[]
+	brackets: IBracketsObject[]
 	pipe: T[]
 	currentMentions: IMention[]
 	position: number
@@ -422,9 +434,9 @@ export class SearchResults<M extends IIncludeSeparatorMode, T extends IGetPipeIt
 		return isEmpty(this.pipe)
 	}
 
-	getMentions(indexFrom, indexTo)
+	getMentions(indexFrom: number, indexTo: number)
 	{
-		const properMentions = [] as IMention[], restMentions = [] as IMention[]
+		const properMentions = [] as string[], restMentions = [] as IMention[]
 
 		for (const item of this.currentMentions)
 		{
@@ -438,7 +450,7 @@ export class SearchResults<M extends IIncludeSeparatorMode, T extends IGetPipeIt
 			}
 		}
 
-		return [properMentions.length && properMentions, restMentions] as [IMention[], IMention[]]
+		return [properMentions.length && properMentions, restMentions] as [string[], IMention[]]
 	}
 
 	trimResultText(text: string)
@@ -451,7 +463,7 @@ export class SearchResults<M extends IIncludeSeparatorMode, T extends IGetPipeIt
 		return this.searchSettings.trimSeparators ? text.trim() : text
 	}
 
-	checkSeparator(pSeparator): [text: string | ITextNodeBase, separator: ISeparatorsNode, checked: boolean]
+	checkSeparator(pSeparator: IParameterSeparator): IReturnTypeCheckSeparator
 	{
 		const { string } = this
 		const { check, includePositions, mentions } = this.searchSettings
@@ -460,7 +472,7 @@ export class SearchResults<M extends IIncludeSeparatorMode, T extends IGetPipeIt
 			0: separatorText = '',
 			index: separatorPosition = string.length,
 			searchWithinData,
-		} = pSeparator || {}
+		} = pSeparator ?? {} as IParameterSeparator
 
 		const separatorLength = separatorText.length
 
@@ -474,14 +486,14 @@ export class SearchResults<M extends IIncludeSeparatorMode, T extends IGetPipeIt
 		text = this.trimResultText(text)
 		separatorText = this.trimSeparatorText(separatorText)
 
-		let separator = searchWithinData
+		let separator: any = searchWithinData
 			? [searchWithinData.open, searchWithinData.close]
 			: separatorText
 
 		if (includePositions)
 		{
 			text = { text, position: lastPosition }
-			separator = { text: separator, position: separatorPosition, isSeparator: true }
+			separator = { text: separator as any, position: separatorPosition, isSeparator: true }
 		}
 
 		let restMentions: IMention[]
@@ -543,14 +555,14 @@ export class SearchResults<M extends IIncludeSeparatorMode, T extends IGetPipeIt
 		this.pipe.push(value)
 	}
 
-	addToPipe(pSeparator?)
+	addToPipe(pSeparator?: IParameterSeparator)
 	{
 		let [text, separator, checked] = this.checkSeparator(pSeparator)
 		if (!checked) return false
 
 		switch (this.searchSettings.includeSeparatorMode)
 		{
-			case INCLUDE_SEPARATOR_SEPARATELY:
+			case EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_SEPARATELY:
 				this.pushToPipe(text as any)
 				if (separator)
 				{
@@ -558,11 +570,11 @@ export class SearchResults<M extends IIncludeSeparatorMode, T extends IGetPipeIt
 				}
 				break
 
-			case INCLUDE_SEPARATOR_LEFT:
+			case EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_LEFT:
 				this.pushToPipe([text, separator] as any)
 				break
 
-			case INCLUDE_SEPARATOR_RIGHT:
+			case EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_RIGHT:
 				const textIsEmpty = !(typeof text === 'object' ? text.text : text)
 				if (!textIsEmpty || this.lastSeparator)
 				{
@@ -571,7 +583,7 @@ export class SearchResults<M extends IIncludeSeparatorMode, T extends IGetPipeIt
 				this.lastSeparator = separator
 				break
 
-			case INCLUDE_SEPARATOR_ONLY:
+			case EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_ONLY:
 				if (separator) this.pushToPipe(separator as any)
 				break
 
@@ -604,7 +616,7 @@ export class SearchResults<M extends IIncludeSeparatorMode, T extends IGetPipeIt
 			const { close, ignoreMode, searchLevels } = last(brackets) || {}
 
 			let block
-			const ACTION_CLOSE = 1, ACTION_OPEN = 2, ACTION_ADD_FRAGMENT = 3, ACTION_NULL = 4
+			//const ACTION_CLOSE = 1, ACTION_OPEN = 2, ACTION_ADD_FRAGMENT = 3, ACTION_NULL = 4
 
 			const action: EnumFindBracketsAction =
 				(fragment === close && EnumFindBracketsAction.ACTION_CLOSE) ||
@@ -651,7 +663,7 @@ export class SearchResults<M extends IIncludeSeparatorMode, T extends IGetPipeIt
 		return true
 	}
 
-	findSeparator(separator)
+	findSeparator(separator: IParameterSeparator)
 	{
 		const { searchString: string, freeArea } = this
 		const { separatorSearch } = this.searchSettings
@@ -689,7 +701,7 @@ export class SearchResults<M extends IIncludeSeparatorMode, T extends IGetPipeIt
 
 	getNext(): T
 	{
-		let separator
+		let separator: IParameterSeparator
 		while (this.pipeIsEmpty && !this.isDone)
 		{
 			if (!this.findBrackets())

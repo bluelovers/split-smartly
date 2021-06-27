@@ -355,7 +355,7 @@ class SearchResults {
       0: separatorText = '',
       index: separatorPosition = string.length,
       searchWithinData
-    } = pSeparator || {};
+    } = pSeparator != null ? pSeparator : {};
     const separatorLength = separatorText.length;
     const lastPosition = searchWithinData ? searchWithinData.openPosition : this.position;
     let text = string.substring(lastPosition, separatorPosition);
@@ -445,7 +445,9 @@ class SearchResults {
     if (!checked) return false;
 
     switch (this.searchSettings.includeSeparatorMode) {
-      case INCLUDE_SEPARATOR_SEPARATELY:
+      case "SEPARATELY"
+      /* INCLUDE_SEPARATOR_SEPARATELY */
+      :
         this.pushToPipe(text);
 
         if (separator) {
@@ -454,11 +456,15 @@ class SearchResults {
 
         break;
 
-      case INCLUDE_SEPARATOR_LEFT:
+      case "LEFT"
+      /* INCLUDE_SEPARATOR_LEFT */
+      :
         this.pushToPipe([text, separator]);
         break;
 
-      case INCLUDE_SEPARATOR_RIGHT:
+      case "RIGHT"
+      /* INCLUDE_SEPARATOR_RIGHT */
+      :
         const textIsEmpty = !(typeof text === 'object' ? text.text : text);
 
         if (!textIsEmpty || this.lastSeparator) {
@@ -468,7 +474,9 @@ class SearchResults {
         this.lastSeparator = separator;
         break;
 
-      case INCLUDE_SEPARATOR_ONLY:
+      case "ONLY"
+      /* INCLUDE_SEPARATOR_ONLY */
+      :
         if (separator) this.pushToPipe(separator);
         break;
 
@@ -510,7 +518,8 @@ class SearchResults {
         ignoreMode,
         searchLevels
       } = last(brackets) || {};
-      let block;
+      let block; //const ACTION_CLOSE = 1, ACTION_OPEN = 2, ACTION_ADD_FRAGMENT = 3, ACTION_NULL = 4
+
       const action = fragment === close && 1
       /* ACTION_CLOSE */
       || ignoreMode && 4

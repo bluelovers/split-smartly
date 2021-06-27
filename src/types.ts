@@ -10,8 +10,9 @@ export interface IBracketsObject
 {
 	open: string;
 	close: string;
-	searchLevels: boolean | number[]
+	searchLevels: true | number[];
 	ignoreMode: boolean;
+	openPosition?: number;
 }
 
 export interface IBracketsMap
@@ -19,7 +20,9 @@ export interface IBracketsMap
 	[k: string]: IBracketsObject
 }
 
-export type IMentionsInput = string | boolean | string[] | Record<string, string>;
+export type IMentionsRecord = Record<string, string>;
+
+export type IMentionsInput = string | boolean | string[] | IMentionsRecord;
 
 export interface ISplitSettings<M extends IIncludeSeparatorMode>
 {
@@ -54,10 +57,10 @@ export interface ISplitSettings<M extends IIncludeSeparatorMode>
 	bracketsSearch: RegExp;
 	separatorSearch: RegExp;
 	searchWithin: boolean
-	indexes: number | any[]
+	indexes: number | number[]
 	returnIterator: boolean
 
-	includePositions,
+	includePositions: boolean,
 }
 
 export interface ISplitSettingsInput<M extends IIncludeSeparatorMode> extends Partial<ISplitSettings<M>>
@@ -67,7 +70,7 @@ export interface ISplitSettingsInput<M extends IIncludeSeparatorMode> extends Pa
 
 export interface ISearchSettings<M extends IIncludeSeparatorMode = EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_SEPARATELY> extends ISplitSettings<M>
 {
-	includeSeparatorMode: M;
+
 }
 
 export interface ISearchSettingsInput<M extends IIncludeSeparatorMode = EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_SEPARATELY> extends Partial<ISearchSettings<M>>
@@ -77,32 +80,26 @@ export interface ISearchSettingsInput<M extends IIncludeSeparatorMode = EnumIncl
 
 export interface ICheckParams
 {
-	getString(...args): string;
-
-	getTextAfter(...args): string;
-
-	getMentions(...args): any;
-
-	getSeparator(...args): string;
+	getString(): string;
+	getTextAfter(): string;
+	getMentions(): string[];
+	getSeparator(): string;
 
 	readonly string: string;
-
 	readonly textAfter: string;
-
-	readonly mentions: any;
-
+	readonly mentions: string[];
 	readonly separator: string;
 }
 
 export interface IMention
 {
 	index: number
-	mention
+	mention: string
 }
 
 export type IPipeItem = string | [string, ISeparators] | [ISeparators, string] | ISeparators
 
-export interface IPipeItem2
+interface IPipeItemMap
 {
 	[EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_SEPARATELY]: string
 	[EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_LEFT]: [string, ISeparators]
@@ -112,12 +109,12 @@ export interface IPipeItem2
 
 export type IGetPipeItemByIncludeSeparatorMode<M extends IIncludeSeparatorMode> =
 	M extends EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_ONLY ?
-		IPipeItem2[EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_ONLY] :
+		IPipeItemMap[EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_ONLY] :
 		M extends EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_RIGHT ?
-			IPipeItem2[EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_RIGHT] :
+			IPipeItemMap[EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_RIGHT] :
 			M extends EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_LEFT ?
-				IPipeItem2[EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_LEFT] :
-				IPipeItem2[EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_SEPARATELY]
+				IPipeItemMap[EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_LEFT] :
+				IPipeItemMap[EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_SEPARATELY]
 	;
 export type IGetIncludeSeparatorModeBySettings<T extends ISearchSettingsInput<IIncludeSeparatorMode>> = T extends ISearchSettingsInput<infer M>
 	? M
@@ -130,24 +127,24 @@ export type IIncludeSeparatorMode =
 	| EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_RIGHT
 	| EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_ONLY
 export type ISeparators = string | string[] | RegExp;
-export type ISeparatorsNode = ISeparators | ITextDataSeparator;
+export type ISeparatorsNode = ISeparators | ITextNodeSeparator;
 
 export interface ITextNodeBase
 {
 	text: string
 	position?: number
-	isSeparator?: void
-	mentions?: IMention[]
+	isSeparator?: never
+	mentions?: string[]
 }
 
-export interface ITextDataSeparator extends Omit<ITextNodeBase, 'isSeparator' | 'text'>
+export interface ITextNodeSeparator extends Omit<ITextNodeBase, 'isSeparator' | 'text'>
 {
 	text: ISeparators
 	position: number
 	isSeparator: true
 }
 
-export type ITextNodeOrText = string | ITextNodeBase | ITextDataSeparator;
+export type ITextNodeOrText = string | ITextNodeBase | ITextNodeSeparator;
 
 export const enum EnumFindBracketsAction
 {
@@ -175,3 +172,10 @@ export interface ISplitFunction<M extends IIncludeSeparatorMode> extends ISplitF
 	getIndexes<T extends ISearchSettingsInput<IIncludeSeparatorMode> = ISearchSettingsInput<M>>(string: string, indexes: any[], settings?: T): IGetPipeItemBySettings<T>;
 	getIterator<T extends ISearchSettingsInput<IIncludeSeparatorMode> = ISearchSettingsInput<M>>(string: string, settings?: T): SearchResults<IGetIncludeSeparatorModeBySettings<T>>;
 }
+
+export interface IParameterSeparator extends RegExpExecArray
+{
+	searchWithinData?: IBracketsObject
+}
+
+export type IReturnTypeCheckSeparator = [text: string | ITextNodeBase, separator: ISeparatorsNode, checked: boolean];
