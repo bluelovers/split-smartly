@@ -22,7 +22,7 @@ export const createSplitFunction = <M extends IIncludeSeparatorMode>(settings: I
 		{
 			if (isNaN(index))
 			{
-				throw new Error('second parameter of `getOne` function should be index')
+				throw new TypeError('second parameter of `getOne` function should be index')
 			}
 
 			// @ts-ignore
@@ -44,7 +44,7 @@ export const createSplitFunction = <M extends IIncludeSeparatorMode>(settings: I
 		{
 			if (!Array.isArray(indexes))
 			{
-				throw new Error('second parameter of `getOne` function should be array of indexes')
+				throw new TypeError('second parameter of `getOne` function should be array of indexes')
 			}
 
 			// @ts-ignore

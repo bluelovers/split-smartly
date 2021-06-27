@@ -104,7 +104,7 @@ export const prepareSearch = <M extends IIncludeSeparatorMode>(separators: ISepa
 							}
 							else
 							{
-								throw new Error(`open and close parts of brackets should be separated by space symbol`)
+								throw new TypeError(`open and close parts of brackets should be separated by space symbol`)
 							}
 						}
 						return pair as any
