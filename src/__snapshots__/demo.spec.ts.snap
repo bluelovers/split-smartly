@@ -153,6 +153,16 @@ Array [
 ]
 `;
 
+exports[`demos [ 'one , two , "three , four" , five , six' ] 1`] = `
+Array [
+  "one",
+  "two",
+  "\\"three , four\\"",
+  "five",
+  "six",
+]
+`;
+
 exports[`demos [ 'one _ two _ "three _ four" _ five _ six', '_' ] 1`] = `
 Array [
   "one",
@@ -173,4 +183,16 @@ Array [
 ]
 `;
 
-exports[`demos [ 'p1: point first p2: point second', /p\\d:/gi ] 1`] = `[Function]`;
+exports[`demos [ 'p1: point first p2: point second', /p\\d:/gi ] 1`] = `
+Array [
+  "",
+  "point first",
+  "point second",
+]
+`;
+
+exports[`demos [ [ 'SELECT ', 'FROM ' ] ] 1`] = `[Function]`;
+
+exports[`demos [ { includeSeparatorMode: 'RIGHT', ignoreCase: false } ] 1`] = `[Function]`;
+
+exports[`demos [ {} ] 1`] = `[Function]`;

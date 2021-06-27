@@ -27,6 +27,57 @@ const isEmpty = value => {
 const first = value => value[0];
 const last = value => value[value.length - 1];
 
+let screenedSymbols;
+function arrayToPattern(arr) {
+  var _screenedSymbols;
+
+  (_screenedSymbols = screenedSymbols) != null ? _screenedSymbols : screenedSymbols = new Set('.{}[]^()+*?\\/$|'.split(''));
+  return arr.map(s => {
+    if (s instanceof RegExp) {
+      return s.source;
+    }
+
+    return s.split('').map(s => screenedSymbols.has(s) ? '\\' + s : s).join('');
+  }).join('|');
+}
+
+const getSplitSmartlyArgs = (args, extraSettings) => {
+  if (!(args != null && args.length)) {
+    throw new RangeError('empty arguments');
+  } else if (args.length === 3) {
+    if (!extraSettings) return args;
+  } else if (args.length === 1) {
+    const arg = first(args);
+
+    if (typeof arg === 'string') {
+      // @ts-ignore
+      args.push(',', {});
+    } else if (Array.isArray(arg)) {
+      args.unshift(null);
+      args.push({});
+    } else if (typeof arg === 'object') {
+      // @ts-ignore
+      args.unshift(null, ',');
+    }
+  } else if (args.length === 2) {
+    if (typeof args[0] === 'string' && args[1] instanceof RegExp) {
+      args.push({});
+    } else if (typeof args[1] === 'string' || Array.isArray(args[1])) {
+      args.push({});
+    } else {
+      args.unshift(null);
+    }
+  } else if (args.length > 3) {
+    throw new RangeError('Too much arguments passed to splitSmartly function!!!');
+  } // @ts-ignore
+
+
+  if (extraSettings) args[2] = { ...args[2],
+    ...extraSettings
+  };
+  return args;
+};
+
 const prepareSearch = (separators, settings) => {
   const defaultSettings = {
     brackets: [],
@@ -73,10 +124,7 @@ const prepareSearch = (separators, settings) => {
     },
 
     arrayToPattern(arr) {
-      var _prepareSearch$screen;
-
-      const screenedSymbols = (_prepareSearch$screen = prepareSearch.screenedSymbols) != null ? _prepareSearch$screen : prepareSearch.screenedSymbols = new Set('.{}[]^()+*?\\/$|'.split(''));
-      return arr.map(string => string.split('').map(s => screenedSymbols.has(s) ? '\\' + s : s).join('')).join('|');
+      return arrayToPattern(arr);
     },
 
     createRegExp(pattern) {
@@ -166,41 +214,6 @@ const prepareSearch = (separators, settings) => {
 
   };
   return splitSettings.init();
-};
-
-prepareSearch.screenedSymbols = void 0;
-
-const getSplitSmartlyArgs = (args, extraSettings) => {
-  if (args.length === 3) {
-    if (!extraSettings) return args;
-  } else if (args.length === 1) {
-    const arg = first(args);
-
-    if (typeof arg === 'string') {
-      // @ts-ignore
-      args.push(',', {});
-    } else if (Array.isArray(arg)) {
-      args.unshift(null);
-      args.push({});
-    } else if (typeof arg === 'object') {
-      // @ts-ignore
-      args.unshift(null, ',');
-    }
-  } else if (args.length === 2) {
-    if (typeof args[1] === 'string' || Array.isArray(args[1])) {
-      args.push({});
-    } else {
-      args.unshift(null);
-    }
-  } else if (args.length > 3) {
-    throw new Error('Too much arguments passed to splitSmartly function!!!');
-  } // @ts-ignore
-
-
-  if (extraSettings) args[2] = { ...args[2],
-    ...extraSettings
-  };
-  return args;
 };
 
 function splitSmartly(...args) {

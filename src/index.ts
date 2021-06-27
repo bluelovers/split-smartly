@@ -26,6 +26,8 @@ import {
 	ITextNodeOrText,
 } from "./types"
 import { first, isEmpty, last, once } from './util';
+import { arrayToPattern } from './util/arrayToPattern';
+import { getSplitSmartlyArgs } from './util/getSplitSmartlyArgs';
 
 const prepareSearch = <M extends IIncludeSeparatorMode>(separators: ISeparators, settings: ISplitSettingsInput<M>) =>
 {
@@ -86,13 +88,7 @@ const prepareSearch = <M extends IIncludeSeparatorMode>(separators: ISeparators,
 
 		arrayToPattern(arr)
 		{
-			const screenedSymbols = prepareSearch.screenedSymbols ??= new Set('.{}[]^()+*?\\/$|'.split(''))
-
-			return arr
-				.map(string =>
-					string.split('').map(s => screenedSymbols.has(s) ? '\\' + s : s).join(''),
-				)
-				.join('|')
+			return arrayToPattern(arr)
 		},
 
 		createRegExp(pattern)
@@ -194,60 +190,6 @@ const prepareSearch = <M extends IIncludeSeparatorMode>(separators: ISeparators,
 	}
 
 	return splitSettings.init()
-}
-
-prepareSearch.screenedSymbols = void 0 as Set<string>
-
-const getSplitSmartlyArgs = <M extends IIncludeSeparatorMode, M2 extends IIncludeSeparatorMode = M>(args: IParametersSplitSmartly<M>,
-	extraSettings?: ISplitSettingsInput<M2>,
-) =>
-{
-	if (args.length === 3)
-	{
-		if (!extraSettings) return args
-	}
-
-	else if (args.length === 1)
-	{
-		const arg = first(args)
-		if (typeof arg === 'string')
-		{
-			// @ts-ignore
-			args.push(',', {})
-		}
-		else if (Array.isArray(arg))
-		{
-			args.unshift(null)
-			args.push({})
-		}
-		else if (typeof arg === 'object')
-		{
-			// @ts-ignore
-			args.unshift(null, ',')
-		}
-	}
-
-	else if (args.length === 2)
-	{
-		if (typeof args[1] === 'string' || Array.isArray(args[1]))
-		{
-			args.push({})
-		}
-		else
-		{
-			args.unshift(null)
-		}
-	}
-
-	else if (args.length > 3)
-	{
-		throw new Error('Too much arguments passed to splitSmartly function!!!')
-	}
-
-	// @ts-ignore
-	if (extraSettings) args[2] = { ...args[2], ...extraSettings }
-
-	return args as any as [string, ISeparators, ISplitSettings<M2>]
 }
 
 export function splitSmartly<M extends IIncludeSeparatorMode>(...args: IParametersSplitSmartlyReturnQuery<M>): ISplitFunction<M>
@@ -432,7 +374,7 @@ export class SearchResults<M extends IIncludeSeparatorMode, T extends IGetPipeIt
 		return isEmpty(this.pipe)
 	}
 
-	getMentions(indexFrom: number, indexTo: number)
+	getMentions(indexFrom: number, indexTo: number): [string[], IMention[]]
 	{
 		const properMentions = [] as string[], restMentions = [] as IMention[]
 
@@ -448,7 +390,7 @@ export class SearchResults<M extends IIncludeSeparatorMode, T extends IGetPipeIt
 			}
 		}
 
-		return [properMentions.length && properMentions, restMentions] as [string[], IMention[]]
+		return [properMentions.length && properMentions, restMentions]
 	}
 
 	trimResultText(text: string)
