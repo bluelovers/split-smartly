@@ -212,100 +212,6 @@ const prepareSearch = (separators, settings) => {
   return splitSettings.init();
 };
 
-function splitSmartly(...args) {
-  let [string, separators, settings] = getSplitSmartlyArgs(args);
-  const splitSettings = prepareSearch(separators, settings);
-  const splitFn = createSplitFunction(splitSettings); // @ts-ignore
-
-  return string !== null ? splitFn(string) : splitFn;
-}
-
-splitSmartly.searchWithin = (...args) => {
-  if (args.length === 1) {
-    if (typeof args[0] === 'string') {
-      args.push(null, {});
-    } else {
-      args.unshift(null);
-    }
-  } // @ts-ignore
-
-
-  if (typeof args[1] !== 'object' || !args[1].brackets) {
-    // @ts-ignore
-    args[1] = {
-      brackets: args[1]
-    };
-  }
-
-  args.splice(1, 0, null);
-  return splitSmartly(...getSplitSmartlyArgs(args, {
-    searchWithin: true
-  }));
-};
-
-splitSmartly.search = (...args) => {
-  return splitSmartly(...getSplitSmartlyArgs(args, {
-    includeSeparatorMode: "ONLY"
-    /* INCLUDE_SEPARATOR_ONLY */
-
-  }));
-};
-
-function split(string, settings) {
-  // @ts-ignore
-  const splitSettings = this.merge(settings);
-  let res = new SearchResults(string, splitSettings);
-
-  if (typeof splitSettings.indexes === 'number') {
-    return res.getNext();
-  } else if (!splitSettings.returnIterator) {
-    return res.getAll();
-  }
-
-  return res;
-}
-
-const createSplitFunction = settings => {
-  const splitFn = split.bind(settings);
-  return Object.assign(splitFn, {
-    getOne(string, index, settings = {}) {
-      if (isNaN(index)) {
-        throw new Error('second parameter of `getOne` function should be index');
-      } // @ts-ignore
-
-
-      return splitFn(string, { ...settings,
-        indexes: index
-      });
-    },
-
-    getFirst(string, settings = {}) {
-      // @ts-ignore
-      return splitFn(string, { ...settings,
-        indexes: 0
-      });
-    },
-
-    getIndexes(string, indexes, settings = {}) {
-      if (!Array.isArray(indexes)) {
-        throw new Error('second parameter of `getOne` function should be array of indexes');
-      } // @ts-ignore
-
-
-      return splitFn(string, { ...settings,
-        indexes
-      });
-    },
-
-    getIterator(string, settings = {}) {
-      // @ts-ignore
-      return splitFn(string, { ...settings,
-        returnIterator: true
-      });
-    }
-
-  });
-};
 class SearchResults {
   constructor(string, searchSettings) {
     this.string = string;
@@ -702,6 +608,63 @@ class SearchResults {
   }
 
 }
+
+function split(string, settings) {
+  // @ts-ignore
+  const splitSettings = this.merge(settings);
+  let res = new SearchResults(string, splitSettings);
+
+  if (typeof splitSettings.indexes === 'number') {
+    return res.getNext();
+  } else if (!splitSettings.returnIterator) {
+    return res.getAll();
+  }
+
+  return res;
+}
+
+const createSplitFunction = settings => {
+  const splitFn = split.bind(settings);
+  return Object.assign(splitFn, {
+    getOne(string, index, settings = {}) {
+      if (isNaN(index)) {
+        throw new Error('second parameter of `getOne` function should be index');
+      } // @ts-ignore
+
+
+      return splitFn(string, { ...settings,
+        indexes: index
+      });
+    },
+
+    getFirst(string, settings = {}) {
+      // @ts-ignore
+      return splitFn(string, { ...settings,
+        indexes: 0
+      });
+    },
+
+    getIndexes(string, indexes, settings = {}) {
+      if (!Array.isArray(indexes)) {
+        throw new Error('second parameter of `getOne` function should be array of indexes');
+      } // @ts-ignore
+
+
+      return splitFn(string, { ...settings,
+        indexes
+      });
+    },
+
+    getIterator(string, settings = {}) {
+      // @ts-ignore
+      return splitFn(string, { ...settings,
+        returnIterator: true
+      });
+    }
+
+  });
+};
+
 var EnumIncludeSeparatorMode;
 
 (function (EnumIncludeSeparatorMode) {
@@ -712,22 +675,54 @@ var EnumIncludeSeparatorMode;
   EnumIncludeSeparatorMode["INCLUDE_SEPARATOR_ONLY"] = "ONLY";
 })(EnumIncludeSeparatorMode || (EnumIncludeSeparatorMode = {}));
 
-const INCLUDE_SEPARATOR_NONE = "NONE"
-/* INCLUDE_SEPARATOR_NONE */
-;
-const INCLUDE_SEPARATOR_SEPARATELY = "SEPARATELY"
-/* INCLUDE_SEPARATOR_SEPARATELY */
-;
-const INCLUDE_SEPARATOR_LEFT = "LEFT"
-/* INCLUDE_SEPARATOR_LEFT */
-;
-const INCLUDE_SEPARATOR_RIGHT = "RIGHT"
-/* INCLUDE_SEPARATOR_RIGHT */
-;
-const INCLUDE_SEPARATOR_ONLY = "ONLY"
-/* INCLUDE_SEPARATOR_ONLY */
-;
+var EnumFindBracketsAction;
+
+(function (EnumFindBracketsAction) {
+  EnumFindBracketsAction[EnumFindBracketsAction["ACTION_CLOSE"] = 1] = "ACTION_CLOSE";
+  EnumFindBracketsAction[EnumFindBracketsAction["ACTION_OPEN"] = 2] = "ACTION_OPEN";
+  EnumFindBracketsAction[EnumFindBracketsAction["ACTION_ADD_FRAGMENT"] = 3] = "ACTION_ADD_FRAGMENT";
+  EnumFindBracketsAction[EnumFindBracketsAction["ACTION_NULL"] = 4] = "ACTION_NULL";
+})(EnumFindBracketsAction || (EnumFindBracketsAction = {}));
+
+function splitSmartly(...args) {
+  let [string, separators, settings] = getSplitSmartlyArgs(args);
+  const splitSettings = prepareSearch(separators, settings);
+  const splitFn = createSplitFunction(splitSettings); // @ts-ignore
+
+  return string !== null ? splitFn(string) : splitFn;
+}
+
+splitSmartly.searchWithin = (...args) => {
+  if (args.length === 1) {
+    if (typeof args[0] === 'string') {
+      args.push(null, {});
+    } else {
+      args.unshift(null);
+    }
+  } // @ts-ignore
+
+
+  if (typeof args[1] !== 'object' || !args[1].brackets) {
+    // @ts-ignore
+    args[1] = {
+      brackets: args[1]
+    };
+  }
+
+  args.splice(1, 0, null);
+  return splitSmartly(...getSplitSmartlyArgs(args, {
+    searchWithin: true
+  }));
+};
+
+splitSmartly.search = (...args) => {
+  return splitSmartly(...getSplitSmartlyArgs(args, {
+    includeSeparatorMode: "ONLY"
+    /* INCLUDE_SEPARATOR_ONLY */
+
+  }));
+};
 
 export default splitSmartly;
-export { EnumIncludeSeparatorMode, INCLUDE_SEPARATOR_LEFT, INCLUDE_SEPARATOR_NONE, INCLUDE_SEPARATOR_ONLY, INCLUDE_SEPARATOR_RIGHT, INCLUDE_SEPARATOR_SEPARATELY, SearchResults, createSplitFunction, splitSmartly };
+export { EnumIncludeSeparatorMode, SearchResults, createSplitFunction, splitSmartly };
 //# sourceMappingURL=split-smartly.esm.js.map

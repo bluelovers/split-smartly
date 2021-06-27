@@ -1,4 +1,4 @@
-import splitSmartly, { EnumIncludeSeparatorMode, SearchResults } from './index';
+import { SearchResults } from './searchResults';
 
 export type IBracketsItem = [open: IBracketsObject["open"], close: IBracketsObject["close"], searchLevels?: IBracketsObject["searchLevels"], ignoreMode?: IBracketsObject["ignoreMode"]];
 
@@ -66,6 +66,15 @@ export interface ISplitSettings<M extends IIncludeSeparatorMode>
 export interface ISplitSettingsInput<M extends IIncludeSeparatorMode> extends Partial<ISplitSettings<M>>
 {
 
+}
+
+export const enum EnumIncludeSeparatorMode
+{
+	INCLUDE_SEPARATOR_NONE = 'NONE',
+	INCLUDE_SEPARATOR_SEPARATELY = 'SEPARATELY',
+	INCLUDE_SEPARATOR_LEFT = 'LEFT',
+	INCLUDE_SEPARATOR_RIGHT = 'RIGHT',
+	INCLUDE_SEPARATOR_ONLY = 'ONLY',
 }
 
 export interface ISearchSettings<M extends IIncludeSeparatorMode = EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_SEPARATELY> extends ISplitSettings<M>

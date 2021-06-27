@@ -1,3 +1,44 @@
+export declare class SearchResults<M extends IIncludeSeparatorMode, T extends IGetPipeItemByIncludeSeparatorMode<IIncludeSeparatorMode> = IGetPipeItemBySettings<ISearchSettingsInput<M>>> {
+	string: string;
+	searchSettings: ISearchSettings<M>;
+	brackets: IBracketsObject[];
+	pipe: T[];
+	currentMentions: IMention[];
+	position: number;
+	isDone: boolean;
+	freeArea: {
+		start: number;
+		end: number;
+	};
+	lastSeparator: ISeparatorsNode;
+	searchString: string;
+	indexes: {
+		values: Set<any[]>;
+		max: number;
+		count: number;
+		hasIndex(): boolean;
+		isOverMax(): boolean;
+	};
+	protected tempPosition: number;
+	constructor(string: string, searchSettings: ISearchSettings<M>);
+	prepareSearch(): void;
+	get pipeIsEmpty(): boolean;
+	getMentions(indexFrom: number, indexTo: number): [
+		string[],
+		IMention[]
+	];
+	trimResultText(text: string): string;
+	trimSeparatorText(text: string): string;
+	checkSeparator(pSeparator: IParameterSeparator): IReturnTypeCheckSeparator;
+	pushToPipe(value: T): void;
+	addToPipe(pSeparator?: IParameterSeparator): boolean;
+	findBrackets(): boolean;
+	findSeparator(separator: IParameterSeparator): IParameterSeparator;
+	getNext(): T;
+	getAll(): T[];
+	getRest(): T[];
+	[Symbol.iterator](): Generator<T, void, unknown>;
+}
 export declare type IBracketsItem = [
 	open: IBracketsObject["open"],
 	close: IBracketsObject["close"],
@@ -45,6 +86,13 @@ export interface ISplitSettings<M extends IIncludeSeparatorMode> {
 	includePositions: boolean;
 }
 export interface ISplitSettingsInput<M extends IIncludeSeparatorMode> extends Partial<ISplitSettings<M>> {
+}
+export declare const enum EnumIncludeSeparatorMode {
+	INCLUDE_SEPARATOR_NONE = "NONE",
+	INCLUDE_SEPARATOR_SEPARATELY = "SEPARATELY",
+	INCLUDE_SEPARATOR_LEFT = "LEFT",
+	INCLUDE_SEPARATOR_RIGHT = "RIGHT",
+	INCLUDE_SEPARATOR_ONLY = "ONLY"
 }
 export interface ISearchSettings<M extends IIncludeSeparatorMode = EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_SEPARATELY> extends ISplitSettings<M> {
 }
@@ -137,6 +185,7 @@ export declare type IReturnTypeCheckSeparator = [
 	separator: ISeparatorsNode,
 	checked: boolean
 ];
+export declare const createSplitFunction: <M extends IIncludeSeparatorMode>(settings: ISearchSettingsInput<M>) => ISplitFunction<M>;
 export declare function splitSmartly<M extends IIncludeSeparatorMode>(...args: IParametersSplitSmartlyReturnQuery<M>): ISplitFunction<M>;
 export declare namespace splitSmartly {
 	var searchWithin: <M extends IIncludeSeparatorMode>(...args: IParametersSplitSmartly<M> | [
@@ -153,60 +202,6 @@ export declare namespace splitSmartly {
 	]) => string[];
 	var search: (...args: IParametersSplitSmartly<EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_ONLY>) => ISeparators | ISeparators[];
 }
-export declare const createSplitFunction: <M extends IIncludeSeparatorMode>(settings: ISearchSettingsInput<M>) => ISplitFunction<M>;
-export declare class SearchResults<M extends IIncludeSeparatorMode, T extends IGetPipeItemByIncludeSeparatorMode<IIncludeSeparatorMode> = IGetPipeItemBySettings<ISearchSettingsInput<M>>> {
-	string: string;
-	searchSettings: ISearchSettings<M>;
-	brackets: IBracketsObject[];
-	pipe: T[];
-	currentMentions: IMention[];
-	position: number;
-	isDone: boolean;
-	freeArea: {
-		start: number;
-		end: number;
-	};
-	lastSeparator: ISeparatorsNode;
-	searchString: string;
-	indexes: {
-		values: Set<any[]>;
-		max: number;
-		count: number;
-		hasIndex(): boolean;
-		isOverMax(): boolean;
-	};
-	protected tempPosition: number;
-	constructor(string: string, searchSettings: ISearchSettings<M>);
-	prepareSearch(): void;
-	get pipeIsEmpty(): boolean;
-	getMentions(indexFrom: number, indexTo: number): [
-		string[],
-		IMention[]
-	];
-	trimResultText(text: string): string;
-	trimSeparatorText(text: string): string;
-	checkSeparator(pSeparator: IParameterSeparator): IReturnTypeCheckSeparator;
-	pushToPipe(value: T): void;
-	addToPipe(pSeparator?: IParameterSeparator): boolean;
-	findBrackets(): boolean;
-	findSeparator(separator: IParameterSeparator): IParameterSeparator;
-	getNext(): T;
-	getAll(): T[];
-	getRest(): T[];
-	[Symbol.iterator](): Generator<T, void, unknown>;
-}
-export declare const enum EnumIncludeSeparatorMode {
-	INCLUDE_SEPARATOR_NONE = "NONE",
-	INCLUDE_SEPARATOR_SEPARATELY = "SEPARATELY",
-	INCLUDE_SEPARATOR_LEFT = "LEFT",
-	INCLUDE_SEPARATOR_RIGHT = "RIGHT",
-	INCLUDE_SEPARATOR_ONLY = "ONLY"
-}
-export declare const INCLUDE_SEPARATOR_NONE = EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_NONE;
-export declare const INCLUDE_SEPARATOR_SEPARATELY = EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_SEPARATELY;
-export declare const INCLUDE_SEPARATOR_LEFT = EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_LEFT;
-export declare const INCLUDE_SEPARATOR_RIGHT = EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_RIGHT;
-export declare const INCLUDE_SEPARATOR_ONLY = EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_ONLY;
 export default splitSmartly;
 
 export {};
