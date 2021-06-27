@@ -42,7 +42,7 @@
     "npm:publish": "npm publish && yarn run postpublishOnly",
     "npm:publish:bump": "yarn-tool version && npm publish && yarn run postpublishOnly",
     "npm:publish:lerna": "lerna publish --yes --bump patch",
-    "preversion": "echo preversion && yarn run build && yarn run test -- --coverage",
+    "preversion": "echo preversion && yarn run build && yarn run test",
     "prepublishOnly_": "yarn run prepublishOnly:check-bin && yarn run prepublishOnly:update && yarn run test",
     "prepublishOnly:check-bin": "ynpx --quiet @yarn-tool/check-pkg-bin",
     "prepublishOnly:update": "yarn run ncu && yarn run sort-package-json",

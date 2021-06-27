@@ -23,20 +23,6 @@ const isEmpty = value => {
 const first = value => value[0];
 const last = value => value[value.length - 1];
 
-let screenedSymbols;
-function arrayToPattern(arr) {
-  var _screenedSymbols;
-
-  (_screenedSymbols = screenedSymbols) != null ? _screenedSymbols : screenedSymbols = new Set('.{}[]^()+*?\\/$|'.split(''));
-  return arr.map(s => {
-    if (s instanceof RegExp) {
-      return s.source;
-    }
-
-    return s.split('').map(s => screenedSymbols.has(s) ? '\\' + s : s).join('');
-  }).join('|');
-}
-
 const getSplitSmartlyArgs = (args, extraSettings) => {
   if (!(args != null && args.length)) {
     throw new RangeError('empty arguments');
@@ -73,6 +59,20 @@ const getSplitSmartlyArgs = (args, extraSettings) => {
   };
   return args;
 };
+
+let screenedSymbols;
+function arrayToPattern(arr) {
+  var _screenedSymbols;
+
+  (_screenedSymbols = screenedSymbols) != null ? _screenedSymbols : screenedSymbols = new Set('.{}[]^()+*?\\/$|'.split(''));
+  return arr.map(s => {
+    if (s instanceof RegExp) {
+      return s.source;
+    }
+
+    return s.split('').map(s => screenedSymbols.has(s) ? '\\' + s : s).join('');
+  }).join('|');
+}
 
 const prepareSearch = (separators, settings) => {
   const defaultSettings = {
