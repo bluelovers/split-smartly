@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.7](https://github.com/bluelovers/split-smartly/compare/split-smartly2@1.1.6...split-smartly2@1.1.7) (2021-06-27)
+
+
+### 📦　Code Refactoring
+
+* code splitting `prepareSearch` ([81b604e](https://github.com/bluelovers/split-smartly/commit/81b604efb787df989bb0b8ac16060a25051276d9))
+
+
+### ⚙️　Continuous Integration
+
+* . ([68546ab](https://github.com/bluelovers/split-smartly/commit/68546abe6fecbc4b3cd32603ad8f342cb66e7c97))
+* raulanatol/jest-coverage-comment-action@main ([21daa69](https://github.com/bluelovers/split-smartly/commit/21daa69e6db5ca12cd8c32d83588a356893a4ca1))
+* coverage when push ([bbe5c8c](https://github.com/bluelovers/split-smartly/commit/bbe5c8cbaaac3d6e0aa099320289395781f55117))
+
+
+
+
+
 ## [1.1.6](https://github.com/bluelovers/split-smartly/compare/split-smartly2@1.1.5...split-smartly2@1.1.6) (2021-06-27)
 
 
