@@ -646,7 +646,6 @@ class SearchResults {
 }
 
 function split(string, settings) {
-  // @ts-ignore
   const splitSettings = this.merge(settings);
   let res = new SearchResults(string, splitSettings);
 

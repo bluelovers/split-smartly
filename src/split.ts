@@ -1,10 +1,9 @@
 import { IIncludeSeparatorMode, ISearchSettingsInput, ISplitSettings } from './types';
 import { SearchResults } from './searchResults';
 
-export function split<M extends IIncludeSeparatorMode>(string: string, settings?: ISearchSettingsInput<M>)
+export function split<M extends IIncludeSeparatorMode, M2 extends IIncludeSeparatorMode = M>(this, string: string, settings?: ISearchSettingsInput<M2>)
 {
-	// @ts-ignore
-	const splitSettings = (this as ISplitSettings).merge(settings)
+	const splitSettings = (this as ISplitSettings<M>).merge(settings)
 	let res = new SearchResults(string, splitSettings)
 
 	if (typeof splitSettings.indexes === 'number')

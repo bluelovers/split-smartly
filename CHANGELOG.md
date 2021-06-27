@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.9](https://github.com/bluelovers/split-smartly/compare/split-smartly2@1.1.8...split-smartly2@1.1.9) (2021-06-27)
+
+
+### 📦　Code Refactoring
+
+* code splitting ([e3e86c4](https://github.com/bluelovers/split-smartly/commit/e3e86c4bec487be949327c71e8ea130d95cd6533))
+
+
+
+
+
 ## [1.1.8](https://github.com/bluelovers/split-smartly/compare/split-smartly2@1.1.7...split-smartly2@1.1.8) (2021-06-27)
 
 **Note:** Version bump only for package split-smartly2
