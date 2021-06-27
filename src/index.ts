@@ -9,7 +9,7 @@ import {
 	ISplitFunction,
 } from "./types"
 import { getSplitSmartlyArgs } from './util/getSplitSmartlyArgs';
-import { prepareSearch } from './util/prepareSearch';
+import { prepareSearch } from './prepareSearch';
 import { SearchResults } from './searchResults';
 import { createSplitFunction } from './createSplitFunction';
 

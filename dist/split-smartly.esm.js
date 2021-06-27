@@ -74,49 +74,143 @@ function arrayToPattern(arr) {
   }).join('|');
 }
 
-const prepareSearch = (separators, settings) => {
-  const defaultSettings = {
+function createSeparatorsSearch(settings) {
+  const {
+    separators
+  } = settings;
+
+  if (typeof separators === 'string' || Array.isArray(separators)) {
+    const pattern = settings.arrayToPattern([separators].flat().filter(Boolean));
+    settings.separatorSearch = settings.createRegExp(pattern);
+  } else if (separators) {
+    settings.separatorSearch = separators;
+    settings.ignoreCase = separators.ignoreCase;
+  } else {
+    settings.separatorSearch = /empty/;
+  }
+
+  return settings;
+}
+
+function createBracketsSearch(settings) {
+  const patternParts = Object.entries(settings.bracketsMap) // @ts-ignore
+  .flatMap(([, {
+    close,
+    open
+  }]) => close !== open ? [open, close] : open).concat(Object.keys(settings.mentions || {})).filter(Boolean);
+  const pattern = settings.arrayToPattern(patternParts);
+  settings.bracketsSearch = settings.createRegExp(pattern);
+  return settings;
+}
+
+function createBracketsMap(settings) {
+  let {
+    brackets = [],
+    ignoreInsideQuotes
+  } = settings;
+
+  if (brackets === true) {
+    brackets = settings.defaultBrackets;
+  } else if (typeof brackets === 'object' && !Array.isArray(brackets)) {
+    brackets = Object.entries(brackets);
+  } else if (typeof brackets === 'string') {
+    brackets = brackets.split(',').map(pairText => {
+      let pair = pairText.trim().split(' ');
+
+      if (pair.length !== 2) {
+        if (first(pair).length === 2) {
+          pair = first(pair).split('');
+        } else {
+          throw new TypeError(`open and close parts of brackets should be separated by space symbol`);
+        }
+      }
+
+      return pair;
+    });
+  }
+
+  if (ignoreInsideQuotes) {
+    brackets.unshift([`'`,,, true], [`"`,,, true]);
+  }
+
+  settings.bracketsMap = brackets.reduce((map, [open, close, ...args]) => {
+    if (args.length === 1 && !settings.searchWithin) {
+      args.unshift(undefined);
+    }
+
+    let [searchLevels = settings.searchWithin && 1, ignoreMode] = args;
+
+    if (typeof searchLevels === 'number') {
+      searchLevels = [searchLevels];
+    }
+
+    map[open] = {
+      open,
+      ignoreMode,
+      searchLevels,
+      close: close || open
+    };
+    return map;
+  }, {});
+  return settings;
+}
+
+function mergeSettings(_this, settings) {
+  // @ts-ignore
+  if (!settings) return _this; // @ts-ignore
+
+  settings = { ..._this,
+    ...settings
+  };
+
+  if (['brackets', 'mentions'].some(prop => prop in settings)) {
+    settings.init();
+  } // @ts-ignore
+
+
+  return settings;
+}
+
+function initSettings(settings) {
+  if (Array.isArray(settings.mentions) || typeof settings.mentions === 'string') {
+    const mentionsMap = [settings.mentions].flat().filter(Boolean).reduce((map, keyword) => {
+      const key = settings.ignoreCase ? keyword.toUpperCase() : keyword;
+      map[key] = keyword;
+      return map;
+    }, {});
+    settings.mentions = !isEmpty(mentionsMap) && mentionsMap;
+  }
+
+  return settings.createBracketsMap().createBracketsSearch().createSeparatorsSearch();
+}
+
+function newDefaultSettings() {
+  return {
     brackets: [],
     mentions: [],
     ignoreInsideQuotes: true,
-    includeSeparatorMode: 'NONE',
+    includeSeparatorMode: "NONE"
+    /* INCLUDE_SEPARATOR_NONE */
+    ,
     ignoreCase: true,
     trimResult: true,
     trimSeparators: false,
-    check: undefined,
+    //check: undefined,
     defaultBrackets: [['(', ')'], ['[', ']'], ['{', '}']]
   };
-  const splitSettings = { ...defaultSettings,
+}
+
+const prepareSearch = (separators, settings) => {
+  const splitSettings = { ...newDefaultSettings(),
     ...settings,
     separators,
 
     init() {
-      if (Array.isArray(this.mentions) || typeof this.mentions === 'string') {
-        const mentionsMap = [this.mentions].flat().filter(Boolean).reduce((map, keyword) => {
-          const key = this.ignoreCase ? keyword.toUpperCase() : keyword;
-          map[key] = keyword;
-          return map;
-        }, {});
-        this.mentions = !isEmpty(mentionsMap) && mentionsMap;
-      }
-
-      return this.createBracketsMap().createBracketsSearch().createSeparatorsSearch();
+      return initSettings(this);
     },
 
     merge(settings) {
-      // @ts-ignore
-      if (!settings) return this; // @ts-ignore
-
-      settings = { ...this,
-        ...settings
-      };
-
-      if (['brackets', 'mentions'].some(prop => prop in settings)) {
-        settings.init();
-      } // @ts-ignore
-
-
-      return settings;
+      return mergeSettings(this, settings);
     },
 
     arrayToPattern(arr) {
@@ -128,84 +222,15 @@ const prepareSearch = (separators, settings) => {
     },
 
     createBracketsMap() {
-      let {
-        brackets = [],
-        ignoreInsideQuotes
-      } = this;
-
-      if (brackets === true) {
-        brackets = this.defaultBrackets;
-      } else if (typeof brackets === 'object' && !Array.isArray(brackets)) {
-        brackets = Object.entries(brackets);
-      } else if (typeof brackets === 'string') {
-        brackets = brackets.split(',').map(pairText => {
-          let pair = pairText.trim().split(' ');
-
-          if (pair.length !== 2) {
-            if (first(pair).length === 2) {
-              pair = first(pair).split('');
-            } else {
-              throw new Error(`open and close parts of brackets should be separated by space symbol`);
-            }
-          }
-
-          return pair;
-        });
-      }
-
-      if (ignoreInsideQuotes) {
-        brackets.unshift([`'`,,, true], [`"`,,, true]);
-      }
-
-      this.bracketsMap = brackets.reduce((map, [open, close, ...args]) => {
-        if (args.length === 1 && !this.searchWithin) {
-          args.unshift(undefined);
-        }
-
-        let [searchLevels = this.searchWithin && 1, ignoreMode] = args;
-
-        if (typeof searchLevels === 'number') {
-          searchLevels = [searchLevels];
-        }
-
-        map[open] = {
-          open,
-          ignoreMode,
-          searchLevels,
-          close: close || open
-        };
-        return map;
-      }, {});
-      return this;
+      return createBracketsMap(this);
     },
 
     createBracketsSearch() {
-      const patternParts = Object.entries(this.bracketsMap) // @ts-ignore
-      .flatMap(([, {
-        close,
-        open
-      }]) => close !== open ? [open, close] : open).concat(Object.keys(this.mentions || {})).filter(Boolean);
-      const pattern = this.arrayToPattern(patternParts);
-      this.bracketsSearch = this.createRegExp(pattern);
-      return this;
+      return createBracketsSearch(this);
     },
 
     createSeparatorsSearch() {
-      const {
-        separators
-      } = this;
-
-      if (typeof separators === 'string' || Array.isArray(separators)) {
-        const pattern = this.arrayToPattern([separators].flat().filter(Boolean));
-        this.separatorSearch = this.createRegExp(pattern);
-      } else if (separators) {
-        this.separatorSearch = separators;
-        this.ignoreCase = separators.ignoreCase;
-      } else {
-        this.separatorSearch = /empty/;
-      }
-
-      return this;
+      return createSeparatorsSearch(this);
     }
 
   };
@@ -628,7 +653,7 @@ const createSplitFunction = settings => {
   return Object.assign(splitFn, {
     getOne(string, index, settings = {}) {
       if (isNaN(index)) {
-        throw new Error('second parameter of `getOne` function should be index');
+        throw new TypeError('second parameter of `getOne` function should be index');
       } // @ts-ignore
 
 
@@ -646,7 +671,7 @@ const createSplitFunction = settings => {
 
     getIndexes(string, indexes, settings = {}) {
       if (!Array.isArray(indexes)) {
-        throw new Error('second parameter of `getOne` function should be array of indexes');
+        throw new TypeError('second parameter of `getOne` function should be array of indexes');
       } // @ts-ignore
 
 

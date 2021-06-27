@@ -1,4 +1,5 @@
 import { IIncludeSeparatorMode, IParametersSplitSmartly } from '../../src/types';
+import { newDefaultSettings } from '../../src/util/newDefaultSettings';
 
 export const fixtureDemo = [
 
@@ -30,5 +31,7 @@ export const fixtureDemo = [
 	[['SELECT ', 'FROM ']],
 	[{ includeSeparatorMode: 'RIGHT', ignoreCase: false }],
 	[{}],
+
+	[newDefaultSettings()],
 
 ] as IParametersSplitSmartly<IIncludeSeparatorMode>[]
