@@ -1,8 +1,8 @@
 name: 'coverage'
 on:
-  push:
-    branches:
-      - master
+#  push:
+#    branches:
+#      - master
   pull_request:
     branches:
       - master
@@ -13,8 +13,8 @@ jobs:
       CI_JOB_NUMBER: 1
     steps:
       - uses: actions/checkout@v1
-      - uses: raulanatol/jest-coverage-comment-action@main
+      - uses: artiomtr/jest-coverage-report-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          #package-manager: yarn
+          package-manager: yarn
           #   threshold: 80 # optional parameter
