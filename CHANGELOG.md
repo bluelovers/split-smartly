@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.5](https://github.com/bluelovers/split-smartly/compare/split-smartly2@1.1.4...split-smartly2@1.1.5) (2021-06-27)
+
+
+### 🐛　Bug Fixes
+
+* update types ([8f85ed7](https://github.com/bluelovers/split-smartly/commit/8f85ed70bd3a71a86719a1b1f84c56a691a7434a))
+
+
+### ✨　Features
+
+* update types ([63c6c6b](https://github.com/bluelovers/split-smartly/commit/63c6c6b53b9eec479597f6cc6be704ccb4e73d53))
+
+
+
+
+
 ## [1.1.4](https://github.com/bluelovers/split-smartly/compare/split-smartly2@1.1.3...split-smartly2@1.1.4) (2021-06-27)
 
 **Note:** Version bump only for package split-smartly2
