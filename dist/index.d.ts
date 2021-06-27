@@ -158,18 +158,18 @@ export declare type IParametersSplitSmartlyReturnResult<M extends IIncludeSepara
 ];
 export declare type IParametersSplitSmartly<M extends IIncludeSeparatorMode> = IParametersSplitSmartlyReturnQuery<M> | IParametersSplitSmartlyReturnResult<M>;
 export interface ISplitFunctionCore<M extends IIncludeSeparatorMode> {
-	(string: string, settings?: ISearchSettingsInput<M> & {
+	(string: string, settings: ISearchSettingsInput<M> & {
 		returnIterator: true;
 	}): SearchResults<M>;
-	(string: string, settings?: ISearchSettingsInput<M> & {
-		indexes: number;
-	}): IGetPipeItemByIncludeSeparatorMode<M>;
-	(string: string, settings?: ISearchSettingsInput<M> & {
+	(string: string, settings: ISearchSettingsInput<M> & {
 		indexes: number[];
 	}): IGetPipeItemByIncludeSeparatorMode<M>[];
-	(string: string, settings?: ISearchSettingsInput<M> & {
+	(string: string, settings: ISearchSettingsInput<M> & {
 		returnIterator?: false | void;
 	}): IGetPipeItemByIncludeSeparatorMode<M>[];
+	(string: string, settings: ISearchSettingsInput<M> & {
+		indexes: number;
+	}): IGetPipeItemByIncludeSeparatorMode<M>;
 	(string: string, settings?: ISearchSettingsInput<M>): SearchResults<M> | IGetPipeItemByIncludeSeparatorMode<M> | IGetPipeItemByIncludeSeparatorMode<M>[];
 }
 export interface ISplitFunction<M extends IIncludeSeparatorMode> extends ISplitFunctionCore<M>, ThisType<ISplitSettings<M>> {

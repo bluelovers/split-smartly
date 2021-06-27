@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.10](https://github.com/bluelovers/split-smartly/compare/split-smartly2@1.1.9...split-smartly2@1.1.10) (2021-06-27)
+
+
+### 🐛　Bug Fixes
+
+* **typescript:** ISplitFunction ([d56e8c8](https://github.com/bluelovers/split-smartly/commit/d56e8c81fd7fcf426cf457008388317f43879c4b))
+
+
+
+
+
 ## [1.1.9](https://github.com/bluelovers/split-smartly/compare/split-smartly2@1.1.8...split-smartly2@1.1.9) (2021-06-27)
 
 
