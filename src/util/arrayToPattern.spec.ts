@@ -30,4 +30,12 @@ describe(`describe`, () =>
 		})
 	;
 
+	test('||', () =>
+	{
+		let actual = arrayToPattern([/\|\|/g]);
+		let actual2 = arrayToPattern(['||']);
+
+		expect(actual).toStrictEqual(actual2);
+	});
+
 })

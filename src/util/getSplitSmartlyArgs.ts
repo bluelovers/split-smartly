@@ -22,6 +22,7 @@ export const getSplitSmartlyArgs = <M extends IIncludeSeparatorMode, M2 extends 
 	}
 	else if (args.length === 1)
 	{
+		// @ts-ignore
 		const arg = first(args)
 		if (typeof arg === 'string')
 		{
