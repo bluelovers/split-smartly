@@ -3,6 +3,39 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.6](https://github.com/bluelovers/split-smartly/compare/split-smartly2@1.1.5...split-smartly2@1.1.6) (2021-06-27)
+
+
+### 🐛　Bug Fixes
+
+* 5 - call with regular expression as separator parameter ([42b9927](https://github.com/bluelovers/split-smartly/commit/42b9927099b3a66d2c0c6ba8e31dec7deab226d3))
+
+
+### 📦　Code Refactoring
+
+* TypeError ([73d26b4](https://github.com/bluelovers/split-smartly/commit/73d26b41329f82af92cfb1fb15c46013f38b0c78))
+* code splitting ([7d2ac78](https://github.com/bluelovers/split-smartly/commit/7d2ac78563ae965845f644c855da9c1569382f2c))
+* prepareSearch ([5bda887](https://github.com/bluelovers/split-smartly/commit/5bda8875b76d1eb54950d0f9af956ff68ad6a47a))
+
+
+### ⚙️　Continuous Integration
+
+* add Jest coverage report ([00953e0](https://github.com/bluelovers/split-smartly/commit/00953e0f6d2b8d016ae0d6ae5a175b7f0ed4f4d0))
+
+
+### ♻️　Chores
+
+* update deps ([db78826](https://github.com/bluelovers/split-smartly/commit/db788261402197056a7266f939bbd4cee2a21aaf))
+
+
+### BREAKING CHANGE
+
+* remove `prepareSearch.screenedSymbols`
+
+
+
+
+
 ## [1.1.5](https://github.com/bluelovers/split-smartly/compare/split-smartly2@1.1.4...split-smartly2@1.1.5) (2021-06-27)
 
 
