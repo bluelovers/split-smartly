@@ -2,6 +2,31 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
+const once = fn => {
+  let value, hasValue;
+  return function (...args) {
+    if (!hasValue) {
+      value = fn(...args);
+      hasValue = true;
+    }
+
+    return value;
+  };
+};
+const isEmpty = value => {
+  if (!value) return true;
+
+  if (Array.isArray(value)) {
+    if (value.length === 0) return true;
+  } else if (typeof value === 'object') {
+    if (Object.keys(value).length === 0) return true;
+  }
+
+  return false;
+};
+const first = value => value[0];
+const last = value => value[value.length - 1];
+
 const prepareSearch = (separators, settings) => {
   const defaultSettings = {
     brackets: [],
@@ -48,10 +73,9 @@ const prepareSearch = (separators, settings) => {
     },
 
     arrayToPattern(arr) {
-      prepareSearch.screenedSymbols = prepareSearch.screenedSymbols || new Set('.{}[]^()+*?\\/$|'.split(''));
-      const {
-        screenedSymbols
-      } = prepareSearch;
+      var _prepareSearch$screen;
+
+      const screenedSymbols = (_prepareSearch$screen = prepareSearch.screenedSymbols) != null ? _prepareSearch$screen : prepareSearch.screenedSymbols = new Set('.{}[]^()+*?\\/$|'.split(''));
       return arr.map(string => string.split('').map(s => screenedSymbols.has(s) ? '\\' + s : s).join('')).join('|');
     },
 
@@ -669,35 +693,6 @@ class SearchResults {
   }
 
 }
-
-const once = fn => {
-  let value, hasValue;
-  return function (...args) {
-    if (!hasValue) {
-      value = fn(...args);
-      hasValue = true;
-    }
-
-    return value;
-  };
-};
-
-const isEmpty = value => {
-  if (!value) return true;
-
-  if (Array.isArray(value)) {
-    if (value.length === 0) return true;
-  } else if (typeof value === 'object') {
-    if (Object.keys(value).length === 0) return true;
-  }
-
-  return false;
-};
-
-const first = value => value[0];
-
-const last = value => value[value.length - 1];
-
 exports.EnumIncludeSeparatorMode = void 0;
 
 (function (EnumIncludeSeparatorMode) {

@@ -69,16 +69,16 @@ test('test settings props 1', () =>
 	(querySeparators, { brackets: true, mentions: ['love'] }).getIndexes(queryText, [1, 2])
 	expect(res).toEqual([{ mentions: ["love"], text: "love, joy" }, { text: 'life' }])
 
-	res = splitSmartly('8 - 10 * -problems', '-', {
+	let res2 = splitSmartly('8 - 10 * -problems', '-', {
 		check: info => !info.string.endsWith('*'),
 	})
-	expect(res).toEqual(['8', '10 * -problems'])
+	expect(res2).toEqual(['8', '10 * -problems'])
 
-	res = splitSmartly('life is long AND love BETWEEN pleasure AND pain', 'AND', {
+	res2 = splitSmartly('life is long AND love BETWEEN pleasure AND pain', 'AND', {
 		mentions: ' BETWEEN ',
 		check: ({ mentions, separator }) => !separator || !mentions,
 	})
-	expect(res).toEqual([{ text: 'life is long' }, { text: 'love BETWEEN pleasure AND pain', mentions: [' BETWEEN '] }])
+	expect(res2).toEqual([{ text: 'life is long' }, { text: 'love BETWEEN pleasure AND pain', mentions: [' BETWEEN '] }])
 })
 
 test('test settings props 2', () =>

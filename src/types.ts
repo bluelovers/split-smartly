@@ -162,6 +162,22 @@ export type IParametersSplitSmartly<M extends IIncludeSeparatorMode> = IParamete
 
 export interface ISplitFunctionCore<M extends IIncludeSeparatorMode>
 {
+	(string: string, settings?: ISearchSettingsInput<M> & {
+		returnIterator: true
+	}): SearchResults<M>
+
+	(string: string, settings?: ISearchSettingsInput<M> & {
+		indexes: number
+	}): IGetPipeItemByIncludeSeparatorMode<M>
+
+	(string: string, settings?: ISearchSettingsInput<M> & {
+		indexes: number[]
+	}): IGetPipeItemByIncludeSeparatorMode<M>[]
+
+	(string: string, settings?: ISearchSettingsInput<M> & {
+		returnIterator?: false | void
+	}): IGetPipeItemByIncludeSeparatorMode<M>[]
+
 	(string: string, settings?: ISearchSettingsInput<M>): SearchResults<M> | IGetPipeItemByIncludeSeparatorMode<M> | IGetPipeItemByIncludeSeparatorMode<M>[]
 }
 
@@ -169,7 +185,11 @@ export interface ISplitFunction<M extends IIncludeSeparatorMode> extends ISplitF
 {
 	getOne<T extends ISearchSettingsInput<IIncludeSeparatorMode> = ISearchSettingsInput<M>>(string: string, index: number, settings?: T): IGetPipeItemBySettings<T>;
 	getFirst<T extends ISearchSettingsInput<IIncludeSeparatorMode> = ISearchSettingsInput<M>>(string: string, settings?: T): IGetPipeItemBySettings<T>;
-	getIndexes<T extends ISearchSettingsInput<IIncludeSeparatorMode> = ISearchSettingsInput<M>>(string: string, indexes: any[], settings?: T): IGetPipeItemBySettings<T>;
+
+	getIndexes<T extends ISearchSettingsInput<IIncludeSeparatorMode> = ISearchSettingsInput<M>>(string: string, indexes: number[], settings?: T): IGetPipeItemBySettings<T>[];
+
+	getIndexes<T extends ISearchSettingsInput<IIncludeSeparatorMode> = ISearchSettingsInput<M>>(string: string, indexes: number, settings?: T): IGetPipeItemBySettings<T>;
+
 	getIterator<T extends ISearchSettingsInput<IIncludeSeparatorMode> = ISearchSettingsInput<M>>(string: string, settings?: T): SearchResults<IGetIncludeSeparatorModeBySettings<T>>;
 }
 

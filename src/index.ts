@@ -5,26 +5,27 @@ import {
 	IBracketsMap,
 	IBracketsObject,
 	ICheckParams,
+	IGetIncludeSeparatorModeBySettings,
+	IGetPipeItemByIncludeSeparatorMode,
+	IGetPipeItemBySettings,
 	IIncludeSeparatorMode,
 	IMention,
+	IParameterSeparator,
 	IParametersSplitSmartly,
 	IParametersSplitSmartlyReturnQuery,
 	IParametersSplitSmartlyReturnResult,
-	IGetPipeItemByIncludeSeparatorMode,
-	IGetIncludeSeparatorModeBySettings,
-	IGetPipeItemBySettings,
+	IReturnTypeCheckSeparator,
 	ISearchSettings,
 	ISearchSettingsInput,
 	ISeparators,
 	ISeparatorsNode,
-	ISplitSettings,
-	ISplitSettingsInput,
-	ITextNodeBase,
-	ITextNodeOrText,
 	ISplitFunction,
 	ISplitFunctionCore,
-	IParameterSeparator, IReturnTypeCheckSeparator,
+	ISplitSettings,
+	ISplitSettingsInput,
+	ITextNodeOrText,
 } from "./types"
+import { first, isEmpty, last, once } from './util';
 
 const prepareSearch = <M extends IIncludeSeparatorMode>(separators: ISeparators, settings: ISplitSettingsInput<M>) =>
 {
@@ -85,11 +86,8 @@ const prepareSearch = <M extends IIncludeSeparatorMode>(separators: ISeparators,
 
 		arrayToPattern(arr)
 		{
-			prepareSearch.screenedSymbols =
-				prepareSearch.screenedSymbols ||
-				new Set('.{}[]^()+*?\\/$|'.split(''))
+			const screenedSymbols = prepareSearch.screenedSymbols ??= new Set('.{}[]^()+*?\\/$|'.split(''))
 
-			const { screenedSymbols } = prepareSearch
 			return arr
 				.map(string =>
 					string.split('').map(s => screenedSymbols.has(s) ? '\\' + s : s).join(''),
@@ -102,7 +100,7 @@ const prepareSearch = <M extends IIncludeSeparatorMode>(separators: ISeparators,
 			return RegExp(pattern, 'g')
 		},
 
-		createBracketsMap(): typeof splitSettings
+		createBracketsMap()
 		{
 			let { brackets = [] as IBrackets, ignoreInsideQuotes } = this
 			if (brackets === true)
@@ -158,7 +156,7 @@ const prepareSearch = <M extends IIncludeSeparatorMode>(separators: ISeparators,
 			return this
 		},
 
-		createBracketsSearch(): typeof splitSettings
+		createBracketsSearch()
 		{
 			const patternParts = Object.entries(this.bracketsMap)
 				// @ts-ignore
@@ -172,7 +170,7 @@ const prepareSearch = <M extends IIncludeSeparatorMode>(separators: ISeparators,
 			return this
 		},
 
-		createSeparatorsSearch(): typeof splitSettings
+		createSeparatorsSearch()
 		{
 			const { separators } = this
 
@@ -330,7 +328,7 @@ export const createSplitFunction = <M extends IIncludeSeparatorMode>(settings: I
 			}
 
 			// @ts-ignore
-			return splitFn(string, { ...settings, indexes: index }) as string[]
+			return splitFn(string, { ...settings, indexes: index })
 		},
 
 		getFirst<T extends ISearchSettingsInput<IIncludeSeparatorMode> = ISearchSettingsInput<M>>(string: string,
@@ -338,11 +336,11 @@ export const createSplitFunction = <M extends IIncludeSeparatorMode>(settings: I
 		): IGetPipeItemBySettings<T>
 		{
 			// @ts-ignore
-			return splitFn(string, { ...settings, indexes: 0 }) as string[]
+			return splitFn(string, { ...settings, indexes: 0 })
 		},
 
 		getIndexes<T extends ISearchSettingsInput<IIncludeSeparatorMode> = ISearchSettingsInput<M>>(string: string,
-			indexes: any[],
+			indexes: number[],
 			settings = {} as T,
 		): IGetPipeItemBySettings<T>
 		{
@@ -761,40 +759,6 @@ export class SearchResults<M extends IIncludeSeparatorMode, T extends IGetPipeIt
 		 */
 	}
 }
-
-const once = <T extends (...args: any[]) => any>(fn: T) =>
-{
-	let value, hasValue
-	return function (...args)
-	{
-		if (!hasValue)
-		{
-			value = fn(...args)
-			hasValue = true
-		}
-		return value
-	} as T
-}
-
-const isEmpty = <T extends ITextNodeOrText | any[] | Record<any, any>>(value: T) =>
-{
-	if (!value) return true
-
-	if (Array.isArray(value))
-	{
-		if (value.length === 0) return true
-	}
-
-	else if (typeof value === 'object')
-	{
-		if (Object.keys(value).length === 0) return true
-	}
-
-	return false
-}
-
-const first = <T>(value: T[]): T => value[0]
-const last = <T>(value: T[]): T => value[value.length - 1]
 
 export const enum EnumIncludeSeparatorMode
 {
