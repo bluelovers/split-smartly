@@ -1,5 +1,5 @@
 {
-  "name": "split-smartly",
+  "name": "split-smartly2",
   "version": "1.1.3",
   "description": "spliting text ignoring parts inside quotes, brackets and etc",
   "keywords": [
@@ -30,7 +30,7 @@
   "scripts": {
     "build:dts": "dts-bundle-generator -o ./dist/index.d.ts ./src/index.ts --no-banner",
     "test": "tsdx test",
-    "build": "tsdx build --target node && yarn run build:dts",
+    "build": "tsdx build --target node --name split-smartly && yarn run build:dts",
     "npm:publish": "npm publish && yarn run postpublishOnly",
     "npm:publish:bump": "yarn-tool version && npm publish && yarn run postpublishOnly",
     "preversion": "echo preversion && yarn run build && yarn run test",
