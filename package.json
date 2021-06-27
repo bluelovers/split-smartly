@@ -30,10 +30,13 @@
   },
   "files": [
     "tsconfig.json",
-    "src/**/*.ts",
+    "src/**/*.*",
+    "dist/**/*",
     "!**/*.test.ts",
     "!**/*.spec.ts",
-    "dist/**/*"
+    "!**/*.test.js",
+    "!**/*.spec.js",
+    "!**/__snapshots__/*"
   ],
   "scripts": {
     "test": "tsdx test",
