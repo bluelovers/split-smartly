@@ -1,12 +1,11 @@
-import { IBrackets, IBracketsMap, IIncludeSeparatorMode, ISplitSettings } from '../types';
+import { IBrackets, IBracketsInput, IBracketsMap, IIncludeSeparatorMode, ISplitSettings } from '../types';
 import { first } from '../util';
 
-export function createBracketsMap<M extends IIncludeSeparatorMode>(settings: ISplitSettings<M>)
+export function normalizeBrackets(brackets: IBracketsInput, defaultBrackets: IBrackets)
 {
-	let { brackets = [] as IBrackets, ignoreInsideQuotes } = settings
 	if (brackets === true)
 	{
-		brackets = settings.defaultBrackets
+		brackets = defaultBrackets.slice()
 	}
 	else if (typeof brackets === 'object' && !Array.isArray(brackets))
 	{
@@ -34,18 +33,18 @@ export function createBracketsMap<M extends IIncludeSeparatorMode>(settings: ISp
 			}) as IBrackets
 	}
 
-	if (ignoreInsideQuotes)
-	{
-		brackets.unshift([`'`, , , true], [`"`, , , true])
-	}
+	return brackets ?? []
+}
 
-	settings.bracketsMap = brackets.reduce((map, [open, close, ...args]) =>
+export function buildBracketsMap(brackets: IBrackets, searchWithin?: boolean)
+{
+	return brackets.reduce((map, [open, close, ...args]) =>
 	{
-		if (args.length === 1 && !settings.searchWithin)
+		if (args.length === 1 && !searchWithin)
 		{
 			args.unshift(undefined)
 		}
-		let [searchLevels = settings.searchWithin && 1, ignoreMode] = args
+		let [searchLevels = searchWithin && 1, ignoreMode] = args
 		if (typeof searchLevels === 'number')
 		{
 			searchLevels = [searchLevels]
@@ -53,6 +52,30 @@ export function createBracketsMap<M extends IIncludeSeparatorMode>(settings: ISp
 		map[open] = { open, ignoreMode, searchLevels, close: close || open }
 		return map
 	}, {} as IBracketsMap)
+}
 
-	return settings
+export function handleBracketsMapOptions(brackets: IBrackets, settings: ISplitSettings<IIncludeSeparatorMode>)
+{
+	if (settings.ignoreInsideQuotes)
+	{
+		brackets.unshift([`'`, , , true], [`"`, , , true])
+	}
+
+	return brackets
+}
+
+export function createBracketsMap<T extends ISplitSettings<IIncludeSeparatorMode>>(settings: T): T & {
+	brackets: IBrackets,
+	bracketsMap: IBracketsMap,
+}
+{
+	let brackets = settings.brackets = normalizeBrackets(settings.brackets, settings.defaultBrackets)
+
+	//let brackets = settings.brackets.slice();
+
+	brackets = handleBracketsMapOptions(brackets, settings);
+
+	settings.bracketsMap = buildBracketsMap(brackets, settings.searchWithin);
+
+	return settings as any
 }

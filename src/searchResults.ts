@@ -15,6 +15,7 @@ import {
 	ITextNodeOrText,
 } from './types';
 import { isEmpty, last, once } from './util';
+import { buildIndexesObject } from './searchResults/buildIndexesObject';
 
 export class SearchResults<M extends IIncludeSeparatorMode, T extends IGetPipeItemByIncludeSeparatorMode<IIncludeSeparatorMode> = IGetPipeItemBySettings<ISearchSettingsInput<M>>>
 {
@@ -42,12 +43,9 @@ export class SearchResults<M extends IIncludeSeparatorMode, T extends IGetPipeIt
 		this.prepareSearch()
 	}
 
-	prepareSearch()
+	protected prepareSearch()
 	{
-		const { separatorSearch, bracketsSearch, indexes } = this.searchSettings
-		const indexesArr = [indexes].flat().filter(Boolean)
-
-		for (const regExp of [separatorSearch, bracketsSearch]) regExp.lastIndex = 0
+		for (const regExp of [this.searchSettings.separatorSearch, this.searchSettings.bracketsSearch]) regExp.lastIndex = 0
 
 		Object.assign(this, {
 			brackets: [],
@@ -62,21 +60,7 @@ export class SearchResults<M extends IIncludeSeparatorMode, T extends IGetPipeIt
 				? this.string.toUpperCase()
 				: this.string,
 
-			indexes: !isEmpty(indexesArr) && {
-				values: new Set(indexesArr),
-				max: Math.max(...indexesArr),
-				count: 0,
-
-				hasIndex()
-				{
-					return this.max === -Infinity || this.values.has(this.count++)
-				},
-
-				isOverMax()
-				{
-					return this.max !== -Infinity && this.count > this.max
-				},
-			},
+			indexes: buildIndexesObject(this.searchSettings.indexes),
 		})
 	}
 

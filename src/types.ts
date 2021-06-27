@@ -1,4 +1,5 @@
 import { SearchResults } from './searchResults';
+import { ITSValueOrArray } from 'ts-type/lib/type/base';
 
 export type IBracketsItem = [open: IBracketsObject["open"], close: IBracketsObject["close"], searchLevels?: IBracketsObject["searchLevels"], ignoreMode?: IBracketsObject["ignoreMode"]];
 
@@ -43,7 +44,7 @@ export interface ISplitSettings<M extends IIncludeSeparatorMode>
 
 	merge<M2 extends IIncludeSeparatorMode = M>(settings: ISplitSettingsInput<M2>): ISplitSettings<M2>;
 
-	arrayToPattern(arr: string[]): string;
+	arrayToPattern(arr: (string | RegExp)[]): string;
 
 	createRegExp(pattern: string): RegExp;
 
@@ -57,7 +58,7 @@ export interface ISplitSettings<M extends IIncludeSeparatorMode>
 	bracketsSearch: RegExp;
 	separatorSearch: RegExp;
 	searchWithin: boolean
-	indexes: number | number[]
+	indexes: ITSValueOrArray<number>
 	returnIterator: boolean
 
 	includePositions: boolean,
@@ -135,7 +136,7 @@ export type IIncludeSeparatorMode =
 	| EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_LEFT
 	| EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_RIGHT
 	| EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_ONLY
-export type ISeparators = string | string[] | RegExp;
+export type ISeparators = ITSValueOrArray<string | RegExp>;
 export type ISeparatorsNode = ISeparators | ITextNodeSeparator;
 
 export interface ITextNodeBase

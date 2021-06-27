@@ -1,3 +1,5 @@
+import { ITSValueOrArray } from 'ts-type/lib/type/base';
+
 export declare class SearchResults<M extends IIncludeSeparatorMode, T extends IGetPipeItemByIncludeSeparatorMode<IIncludeSeparatorMode> = IGetPipeItemBySettings<ISearchSettingsInput<M>>> {
 	string: string;
 	searchSettings: ISearchSettings<M>;
@@ -21,7 +23,7 @@ export declare class SearchResults<M extends IIncludeSeparatorMode, T extends IG
 	};
 	protected tempPosition: number;
 	constructor(string: string, searchSettings: ISearchSettings<M>);
-	prepareSearch(): void;
+	protected prepareSearch(): void;
 	get pipeIsEmpty(): boolean;
 	getMentions(indexFrom: number, indexTo: number): [
 		string[],
@@ -72,7 +74,7 @@ export interface ISplitSettings<M extends IIncludeSeparatorMode> {
 	separators: ISeparators;
 	init(): ISplitSettings<M>;
 	merge<M2 extends IIncludeSeparatorMode = M>(settings: ISplitSettingsInput<M2>): ISplitSettings<M2>;
-	arrayToPattern(arr: string[]): string;
+	arrayToPattern(arr: (string | RegExp)[]): string;
 	createRegExp(pattern: string): RegExp;
 	createBracketsMap(): ISplitSettings<M>;
 	createBracketsSearch(): ISplitSettings<M>;
@@ -81,7 +83,7 @@ export interface ISplitSettings<M extends IIncludeSeparatorMode> {
 	bracketsSearch: RegExp;
 	separatorSearch: RegExp;
 	searchWithin: boolean;
-	indexes: number | number[];
+	indexes: ITSValueOrArray<number>;
 	returnIterator: boolean;
 	includePositions: boolean;
 }
@@ -128,7 +130,7 @@ export declare type IGetPipeItemByIncludeSeparatorMode<M extends IIncludeSeparat
 export declare type IGetIncludeSeparatorModeBySettings<T extends ISearchSettingsInput<IIncludeSeparatorMode>> = T extends ISearchSettingsInput<infer M> ? M : IIncludeSeparatorMode;
 export declare type IGetPipeItemBySettings<T extends ISearchSettingsInput<IIncludeSeparatorMode>> = IGetPipeItemByIncludeSeparatorMode<IGetIncludeSeparatorModeBySettings<T>>;
 export declare type IIncludeSeparatorMode = EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_NONE | EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_SEPARATELY | EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_LEFT | EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_RIGHT | EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_ONLY;
-export declare type ISeparators = string | string[] | RegExp;
+export declare type ISeparators = ITSValueOrArray<string | RegExp>;
 export declare type ISeparatorsNode = ISeparators | ITextNodeSeparator;
 export interface ITextNodeBase {
 	text: string;

@@ -1,7 +1,6 @@
-
 let screenedSymbols: Set<string>;
 
-export function arrayToPattern(arr: (RegExp | string)[])
+export function arrayToPattern(arr: (string | RegExp)[])
 {
 	screenedSymbols ??= new Set('.{}[]^()+*?\\/$|'.split(''))
 

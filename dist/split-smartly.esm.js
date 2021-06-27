@@ -103,14 +103,11 @@ function createBracketsSearch(settings) {
   return settings;
 }
 
-function createBracketsMap(settings) {
-  let {
-    brackets = [],
-    ignoreInsideQuotes
-  } = settings;
+function normalizeBrackets(brackets, defaultBrackets) {
+  var _brackets;
 
   if (brackets === true) {
-    brackets = settings.defaultBrackets;
+    brackets = defaultBrackets.slice();
   } else if (typeof brackets === 'object' && !Array.isArray(brackets)) {
     brackets = Object.entries(brackets);
   } else if (typeof brackets === 'string') {
@@ -129,16 +126,15 @@ function createBracketsMap(settings) {
     });
   }
 
-  if (ignoreInsideQuotes) {
-    brackets.unshift([`'`,,, true], [`"`,,, true]);
-  }
-
-  settings.bracketsMap = brackets.reduce((map, [open, close, ...args]) => {
-    if (args.length === 1 && !settings.searchWithin) {
+  return (_brackets = brackets) != null ? _brackets : [];
+}
+function buildBracketsMap(brackets, searchWithin) {
+  return brackets.reduce((map, [open, close, ...args]) => {
+    if (args.length === 1 && !searchWithin) {
       args.unshift(undefined);
     }
 
-    let [searchLevels = settings.searchWithin && 1, ignoreMode] = args;
+    let [searchLevels = searchWithin && 1, ignoreMode] = args;
 
     if (typeof searchLevels === 'number') {
       searchLevels = [searchLevels];
@@ -152,6 +148,19 @@ function createBracketsMap(settings) {
     };
     return map;
   }, {});
+}
+function handleBracketsMapOptions(brackets, settings) {
+  if (settings.ignoreInsideQuotes) {
+    brackets.unshift([`'`,,, true], [`"`,,, true]);
+  }
+
+  return brackets;
+}
+function createBracketsMap(settings) {
+  let brackets = settings.brackets = normalizeBrackets(settings.brackets, settings.defaultBrackets); //let brackets = settings.brackets.slice();
+
+  brackets = handleBracketsMapOptions(brackets, settings);
+  settings.bracketsMap = buildBracketsMap(brackets, settings.searchWithin);
   return settings;
 }
 
@@ -237,6 +246,24 @@ const prepareSearch = (separators, settings) => {
   return splitSettings.init();
 };
 
+function buildIndexesObject(indexes) {
+  const indexesArr = [indexes].flat().filter(Boolean);
+  return !isEmpty(indexesArr) && {
+    values: new Set(indexesArr),
+    max: Math.max(...indexesArr),
+    count: 0,
+
+    hasIndex() {
+      return this.max === -Infinity || this.values.has(this.count++);
+    },
+
+    isOverMax() {
+      return this.max !== -Infinity && this.count > this.max;
+    }
+
+  };
+}
+
 class SearchResults {
   constructor(string, searchSettings) {
     this.string = string;
@@ -245,14 +272,7 @@ class SearchResults {
   }
 
   prepareSearch() {
-    const {
-      separatorSearch,
-      bracketsSearch,
-      indexes
-    } = this.searchSettings;
-    const indexesArr = [indexes].flat().filter(Boolean);
-
-    for (const regExp of [separatorSearch, bracketsSearch]) regExp.lastIndex = 0;
+    for (const regExp of [this.searchSettings.separatorSearch, this.searchSettings.bracketsSearch]) regExp.lastIndex = 0;
 
     Object.assign(this, {
       brackets: [],
@@ -266,20 +286,7 @@ class SearchResults {
       },
       lastSeparator: undefined,
       searchString: this.searchSettings.ignoreCase && !this.searchSettings.separatorSearch.ignoreCase ? this.string.toUpperCase() : this.string,
-      indexes: !isEmpty(indexesArr) && {
-        values: new Set(indexesArr),
-        max: Math.max(...indexesArr),
-        count: 0,
-
-        hasIndex() {
-          return this.max === -Infinity || this.values.has(this.count++);
-        },
-
-        isOverMax() {
-          return this.max !== -Infinity && this.count > this.max;
-        }
-
-      }
+      indexes: buildIndexesObject(this.searchSettings.indexes)
     });
   }
 

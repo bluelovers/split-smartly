@@ -55,7 +55,9 @@
     "ncu": "yarn-tool ncu -u",
     "sort-package-json": "yarn-tool sort"
   },
-  "dependencies": {},
+  "dependencies": {
+    "ts-type": "^1.2.35"
+  },
   "devDependencies": {
     "@bluelovers/tsconfig": "^1.0.22",
     "@types/jest": "^26.0.23",

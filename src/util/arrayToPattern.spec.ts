@@ -1,7 +1,6 @@
-import { IIncludeSeparatorMode, IParametersSplitSmartly } from '../types';
 import { inspect } from 'util';
-import splitSmartly from '../index';
 import { arrayToPattern } from './arrayToPattern';
+import { ITSValueOrArray } from 'ts-type/lib/type/base';
 
 describe(`describe`, () =>
 {
@@ -17,7 +16,7 @@ describe(`describe`, () =>
 
 		'|',
 
-	] as (string | RegExp | (string | RegExp)[])[])
+	] as (ITSValueOrArray<string | RegExp>)[])
 		.forEach((argv) =>
 		{
 
