@@ -1,5 +1,3 @@
-import { ITSValueOrArray } from 'ts-type/lib/type/base';
-
 export declare class SearchResults<M extends IIncludeSeparatorMode, T extends IGetPipeItemByIncludeSeparatorMode<IIncludeSeparatorMode> = IGetPipeItemBySettings<ISearchSettingsInput<M>>> {
 	string: string;
 	searchSettings: ISearchSettings<M>;
@@ -41,6 +39,7 @@ export declare class SearchResults<M extends IIncludeSeparatorMode, T extends IG
 	getRest(): T[];
 	[Symbol.iterator](): Generator<T, void, unknown>;
 }
+export declare type ITSValueOrArray<T> = T | T[];
 export declare type IBracketsItem = [
 	open: IBracketsObject["open"],
 	close: IBracketsObject["close"],

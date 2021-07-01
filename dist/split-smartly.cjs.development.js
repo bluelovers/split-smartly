@@ -28,7 +28,7 @@ const first = value => value[0];
 const last = value => value[value.length - 1];
 
 const getSplitSmartlyArgs = (args, extraSettings) => {
-  if (!(args != null && args.length)) {
+  if (!(args !== null && args !== void 0 && args.length)) {
     throw new RangeError('empty arguments');
   } else if (args.length === 3) {
     if (!extraSettings) return args;
@@ -69,7 +69,7 @@ let screenedSymbols;
 function arrayToPattern(arr) {
   var _screenedSymbols;
 
-  (_screenedSymbols = screenedSymbols) != null ? _screenedSymbols : screenedSymbols = new Set('.{}[]^()+*?\\/$|'.split(''));
+  (_screenedSymbols = screenedSymbols) !== null && _screenedSymbols !== void 0 ? _screenedSymbols : screenedSymbols = new Set('.{}[]^()+*?\\/$|'.split(''));
   return arr.map(s => {
     if (s instanceof RegExp) {
       return s.source;
@@ -131,7 +131,7 @@ function normalizeBrackets(brackets, defaultBrackets) {
     });
   }
 
-  return (_brackets = brackets) != null ? _brackets : [];
+  return (_brackets = brackets) !== null && _brackets !== void 0 ? _brackets : [];
 }
 function buildBracketsMap(brackets, searchWithin) {
   return brackets.reduce((map, [open, close, ...args]) => {
@@ -335,7 +335,7 @@ class SearchResults {
       0: separatorText = '',
       index: separatorPosition = string.length,
       searchWithinData
-    } = pSeparator != null ? pSeparator : {};
+    } = pSeparator !== null && pSeparator !== void 0 ? pSeparator : {};
     const separatorLength = separatorText.length;
     const lastPosition = searchWithinData ? searchWithinData.openPosition : this.position;
     let text = string.substring(lastPosition, separatorPosition);
@@ -479,7 +479,14 @@ class SearchResults {
       separatorSearch,
       searchWithin
     } = searchSettings;
-    const condition = searchWithin ? () => this.pipeIsEmpty : () => !freeArea.end;
+    const condition = searchWithin ? () => this.pipeIsEmpty : () => {
+      // avoid run forever when string.length = 1
+      if (typeof freeArea.start === 'number' && freeArea.start === freeArea.end) {
+        return false;
+      }
+
+      return !freeArea.end;
+    };
 
     while (condition()) {
       var _searchSettings$menti;
@@ -506,7 +513,7 @@ class SearchResults {
       /* ACTION_NULL */
       || (block = searchSettings.bracketsMap[fragment]) && 2
       /* ACTION_OPEN */
-      || ((_searchSettings$menti = searchSettings.mentions) == null ? void 0 : _searchSettings$menti[fragment]) && 3
+      || ((_searchSettings$menti = searchSettings.mentions) === null || _searchSettings$menti === void 0 ? void 0 : _searchSettings$menti[fragment]) && 3
       /* ACTION_ADD_FRAGMENT */
       ;
 

@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.11](https://github.com/bluelovers/split-smartly/compare/split-smartly2@1.1.10...split-smartly2@1.1.11) (2021-07-01)
+
+
+### 🐛　Bug Fixes
+
+* avoid run forever when string.length = 1 ([91e2856](https://github.com/bluelovers/split-smartly/commit/91e2856556d5203b4a71186caf1acc855ba3776c))
+
+
+### 🛠　Build System
+
+* update tsdx ([e4d7304](https://github.com/bluelovers/split-smartly/commit/e4d7304f6a74b61e7c7c2c34b0b3a8d003f7b247))
+
+
+### ⚙️　Continuous Integration
+
+* update script ([8baa96b](https://github.com/bluelovers/split-smartly/commit/8baa96bfbd93fe5ef07e61a61ee57345122ea7c0))
+* test coverage ([75ae430](https://github.com/bluelovers/split-smartly/commit/75ae430f7e1253e349ca4c345b696fb96253c19c))
+
+
+
+
+
 ## [1.1.10](https://github.com/bluelovers/split-smartly/compare/split-smartly2@1.1.9...split-smartly2@1.1.10) (2021-06-27)
 
 
