@@ -39,7 +39,7 @@
     "!**/__snapshots__/*"
   ],
   "scripts": {
-    "ci:install": "yarn add tsdx@npm:@bluelovers/tsdx",
+    "ci:install": "yarn add tsdx@npm:@bluelovers/tsdx @yarn-tool/require-resolve",
     "test": "tsdx test",
     "build": "tsdx build --target node --name split-smartly && yarn run build:dts",
     "build:dts": "dts-bundle-generator -o ./dist/index.d.ts ./src/index.ts --no-banner --external-inlines ts-type",

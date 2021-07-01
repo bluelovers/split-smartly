@@ -16,6 +16,7 @@ jobs:
       CI_JOB_NUMBER: 1
     steps:
       - uses: actions/checkout@master
+      - uses: actions/setup-node@master
       - name: install deps
         run: yarn run ci:install
       - uses: artiomtr/jest-coverage-report-action@master

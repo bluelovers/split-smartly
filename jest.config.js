@@ -13,6 +13,7 @@ function _requireResolve(name)
 			includeGlobal: true,
 			includeCurrentDirectory: true,
 			paths: [
+				requireResolveExtra('@bluelovers/tsdx').result,
 				tsdx_path,
 			],
 		})
