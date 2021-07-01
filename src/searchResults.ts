@@ -234,7 +234,16 @@ export class SearchResults<M extends IIncludeSeparatorMode, T extends IGetPipeIt
 		const { searchString: string, brackets, freeArea, searchSettings } = this
 		const { bracketsSearch, separatorSearch, searchWithin } = searchSettings
 
-		const condition = searchWithin ? () => this.pipeIsEmpty : () => !freeArea.end
+		const condition = searchWithin ? () => this.pipeIsEmpty : () => {
+
+			// avoid run forever when string.length = 1
+			if (typeof freeArea.start === 'number' && freeArea.start === freeArea.end)
+			{
+				return false
+			}
+
+			return !freeArea.end
+		}
 
 		while (condition())
 		{
