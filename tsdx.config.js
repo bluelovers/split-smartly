@@ -11,6 +11,8 @@ module.exports = {
 			options,
 		})
 
+		console.dir(config.plugins)
+
 		config.output.preferConst = true;
 
 		return config;
