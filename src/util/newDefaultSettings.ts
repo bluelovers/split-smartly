@@ -1,9 +1,6 @@
 import {
 	EnumIncludeSeparatorMode,
 	IBrackets,
-	IIncludeSeparatorMode,
-	ISplitSettings,
-	ISplitSettingsInput,
 } from '../types';
 
 export function newDefaultSettings()

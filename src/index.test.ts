@@ -1,7 +1,5 @@
-import splitSmartly from './index'
-import { SearchResults } from './searchResults';
+import { splitSmartly } from './index'
 import { EnumIncludeSeparatorMode } from './types';
-import { createSplitFunction } from './createSplitFunction';
 
 const numbersText = `1, 2 (3, 4), "5,6"`
 const queryText = 'select love, joy from life where nobody and nothing'
@@ -100,6 +98,7 @@ test('test settings props 2', () =>
 	expect(res2).toEqual(['6, 7'])
 })
 
+// @ts-ignore
 const logIt = fn =>
 {
 	const exprText = fn.toString().split('\n').slice(1, -1).join('\n').substring(9).replace('Smart', 'Smartly')
@@ -107,6 +106,7 @@ const logIt = fn =>
 	console.log('res = ' + exprText + '\n// res: ' + res)
 }
 
+// @ts-ignore
 const splitSmart = splitSmartly
 // logIt(() => splitSmart('select best FROM life', ['SELECT ', 'FROM '], {includeSeparatorMode: EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_RIGHT, ignoreCase: false }))
 // logIt(() => splitSmart('one / two / "three / four" / five / six', '/'))

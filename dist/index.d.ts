@@ -1,3 +1,5 @@
+import { ITSValueOrArray } from 'ts-type/lib/type/base';
+
 export declare class SearchResults<M extends IIncludeSeparatorMode, T extends IGetPipeItemByIncludeSeparatorMode<IIncludeSeparatorMode> = IGetPipeItemBySettings<ISearchSettingsInput<M>>> {
 	string: string;
 	searchSettings: ISearchSettings<M>;
@@ -39,7 +41,6 @@ export declare class SearchResults<M extends IIncludeSeparatorMode, T extends IG
 	getRest(): T[];
 	[Symbol.iterator](): Generator<T, void, unknown>;
 }
-export declare type ITSValueOrArray<T> = T | T[];
 export declare type IBracketsItem = [
 	open: IBracketsObject["open"],
 	close: IBracketsObject["close"],
@@ -188,13 +189,6 @@ export declare type IReturnTypeCheckSeparator = [
 ];
 export declare const createSplitFunction: <M extends IIncludeSeparatorMode>(settings: ISearchSettingsInput<M>) => ISplitFunction<M>;
 export declare function splitSmartly<M extends IIncludeSeparatorMode>(...args: IParametersSplitSmartlyReturnQuery<M>): ISplitFunction<M>;
-export declare namespace splitSmartly {
-	var searchWithin: <M extends IIncludeSeparatorMode>(...args: IParametersSplitSmartly<M> | [
-		string,
-		IBracketsInput
-	]) => string[];
-	var search: (...args: IParametersSplitSmartly<EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_ONLY>) => ISeparators | ISeparators[];
-}
 export declare function splitSmartly<M extends IIncludeSeparatorMode>(...args: IParametersSplitSmartlyReturnResult<M>): IGetPipeItemByIncludeSeparatorMode<M> | IGetPipeItemByIncludeSeparatorMode<M>[];
 export declare namespace splitSmartly {
 	var searchWithin: <M extends IIncludeSeparatorMode>(...args: IParametersSplitSmartly<M> | [

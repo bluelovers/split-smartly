@@ -33,17 +33,14 @@ const getSplitSmartlyArgs = (args, extraSettings) => {
   } else if (args.length === 3) {
     if (!extraSettings) return args;
   } else if (args.length === 1) {
-    // @ts-ignore
     const arg = first(args);
 
     if (typeof arg === 'string') {
-      // @ts-ignore
       args.push(',', {});
     } else if (Array.isArray(arg)) {
       args.unshift(null);
       args.push({});
     } else if (typeof arg === 'object') {
-      // @ts-ignore
       args.unshift(null, ',');
     }
   } else if (args.length === 2) {
@@ -56,8 +53,7 @@ const getSplitSmartlyArgs = (args, extraSettings) => {
     }
   } else if (args.length > 3) {
     throw new RangeError('Too much arguments passed to splitSmartly function!!!');
-  } // @ts-ignore
-
+  }
 
   if (extraSettings) args[2] = { ...args[2],
     ...extraSettings
@@ -98,8 +94,7 @@ function createSeparatorsSearch(settings) {
 }
 
 function createBracketsSearch(settings) {
-  const patternParts = Object.entries(settings.bracketsMap) // @ts-ignore
-  .flatMap(([, {
+  const patternParts = Object.entries(settings.bracketsMap).flatMap(([, {
     close,
     open
   }]) => close !== open ? [open, close] : open).concat(Object.keys(settings.mentions || {})).filter(Boolean);
@@ -162,25 +157,21 @@ function handleBracketsMapOptions(brackets, settings) {
   return brackets;
 }
 function createBracketsMap(settings) {
-  let brackets = settings.brackets = normalizeBrackets(settings.brackets, settings.defaultBrackets); //let brackets = settings.brackets.slice();
-
+  let brackets = settings.brackets = normalizeBrackets(settings.brackets, settings.defaultBrackets);
   brackets = handleBracketsMapOptions(brackets, settings);
   settings.bracketsMap = buildBracketsMap(brackets, settings.searchWithin);
   return settings;
 }
 
 function mergeSettings(_this, settings) {
-  // @ts-ignore
-  if (!settings) return _this; // @ts-ignore
-
+  if (!settings) return _this;
   settings = { ..._this,
     ...settings
   };
 
   if (['brackets', 'mentions'].some(prop => prop in settings)) {
     settings.init();
-  } // @ts-ignore
-
+  }
 
   return settings;
 }
@@ -203,13 +194,10 @@ function newDefaultSettings() {
     brackets: [],
     mentions: [],
     ignoreInsideQuotes: true,
-    includeSeparatorMode: "NONE"
-    /* INCLUDE_SEPARATOR_NONE */
-    ,
+    includeSeparatorMode: "NONE",
     ignoreCase: true,
     trimResult: true,
     trimSeparators: false,
-    //check: undefined,
     defaultBrackets: [['(', ')'], ['[', ']'], ['{', '}']]
   };
 }
@@ -425,9 +413,7 @@ class SearchResults {
     if (!checked) return false;
 
     switch (this.searchSettings.includeSeparatorMode) {
-      case "SEPARATELY"
-      /* INCLUDE_SEPARATOR_SEPARATELY */
-      :
+      case "SEPARATELY":
         this.pushToPipe(text);
 
         if (separator) {
@@ -436,15 +422,11 @@ class SearchResults {
 
         break;
 
-      case "LEFT"
-      /* INCLUDE_SEPARATOR_LEFT */
-      :
+      case "LEFT":
         this.pushToPipe([text, separator]);
         break;
 
-      case "RIGHT"
-      /* INCLUDE_SEPARATOR_RIGHT */
-      :
+      case "RIGHT":
         const textIsEmpty = !(typeof text === 'object' ? text.text : text);
 
         if (!textIsEmpty || this.lastSeparator) {
@@ -454,9 +436,7 @@ class SearchResults {
         this.lastSeparator = separator;
         break;
 
-      case "ONLY"
-      /* INCLUDE_SEPARATOR_ONLY */
-      :
+      case "ONLY":
         if (separator) this.pushToPipe(separator);
         break;
 
@@ -480,7 +460,6 @@ class SearchResults {
       searchWithin
     } = searchSettings;
     const condition = searchWithin ? () => this.pipeIsEmpty : () => {
-      // avoid run forever when string.length = 1
       if (typeof freeArea.start === 'number' && freeArea.start === freeArea.end) {
         return false;
       }
@@ -505,22 +484,11 @@ class SearchResults {
         ignoreMode,
         searchLevels
       } = last(brackets) || {};
-      let block; //const ACTION_CLOSE = 1, ACTION_OPEN = 2, ACTION_ADD_FRAGMENT = 3, ACTION_NULL = 4
-
-      const action = fragment === close && 1
-      /* ACTION_CLOSE */
-      || ignoreMode && 4
-      /* ACTION_NULL */
-      || (block = searchSettings.bracketsMap[fragment]) && 2
-      /* ACTION_OPEN */
-      || ((_searchSettings$menti = searchSettings.mentions) === null || _searchSettings$menti === void 0 ? void 0 : _searchSettings$menti[fragment]) && 3
-      /* ACTION_ADD_FRAGMENT */
-      ;
+      let block;
+      const action = fragment === close && 1 || ignoreMode && 4 || (block = searchSettings.bracketsMap[fragment]) && 2 || ((_searchSettings$menti = searchSettings.mentions) === null || _searchSettings$menti === void 0 ? void 0 : _searchSettings$menti[fragment]) && 3;
 
       switch (action) {
-        case 1
-        /* ACTION_CLOSE */
-        :
+        case 1:
           const bracketData = brackets.pop();
 
           if (searchWithin) {
@@ -539,9 +507,7 @@ class SearchResults {
 
           break;
 
-        case 2
-        /* ACTION_OPEN */
-        :
+        case 2:
           brackets.push({ ...block,
             openPosition: match.index + fragment.length
           });
@@ -552,9 +518,7 @@ class SearchResults {
 
           break;
 
-        case 3
-        /* ACTION_ADD_FRAGMENT */
-        :
+        case 3:
           const mention = searchSettings.mentions[fragment];
           this.currentMentions.push({
             mention,
@@ -623,8 +587,7 @@ class SearchResults {
     }
 
     return res;
-  } // @ts-ignore
-
+  }
 
   *[Symbol.iterator]() {
     this.prepareSearch();
@@ -638,17 +601,6 @@ class SearchResults {
         yield value;
       }
     } while (value !== null);
-    /*
-    return {
-        //object,
-         next () {
-            const value = object.getNext()
-            if (value === null) return { done: true }
-             return { value, done: false }
-        }
-    }
-     */
-
   }
 
 }
@@ -672,8 +624,7 @@ const createSplitFunction = settings => {
     getOne(string, index, settings = {}) {
       if (isNaN(index)) {
         throw new TypeError('second parameter of `getOne` function should be index');
-      } // @ts-ignore
-
+      }
 
       return splitFn(string, { ...settings,
         indexes: index
@@ -681,7 +632,6 @@ const createSplitFunction = settings => {
     },
 
     getFirst(string, settings = {}) {
-      // @ts-ignore
       return splitFn(string, { ...settings,
         indexes: 0
       });
@@ -690,8 +640,7 @@ const createSplitFunction = settings => {
     getIndexes(string, indexes, settings = {}) {
       if (!Array.isArray(indexes)) {
         throw new TypeError('second parameter of `getOne` function should be array of indexes');
-      } // @ts-ignore
-
+      }
 
       return splitFn(string, { ...settings,
         indexes
@@ -699,7 +648,6 @@ const createSplitFunction = settings => {
     },
 
     getIterator(string, settings = {}) {
-      // @ts-ignore
       return splitFn(string, { ...settings,
         returnIterator: true
       });
@@ -730,8 +678,7 @@ var EnumFindBracketsAction;
 function splitSmartly(...args) {
   let [string, separators, settings] = getSplitSmartlyArgs(args);
   const splitSettings = prepareSearch(separators, settings);
-  const splitFn = createSplitFunction(splitSettings); // @ts-ignore
-
+  const splitFn = createSplitFunction(splitSettings);
   return string !== null ? splitFn(string) : splitFn;
 }
 
@@ -742,11 +689,9 @@ splitSmartly.searchWithin = (...args) => {
     } else {
       args.unshift(null);
     }
-  } // @ts-ignore
-
+  }
 
   if (typeof args[1] !== 'object' || !args[1].brackets) {
-    // @ts-ignore
     args[1] = {
       brackets: args[1]
     };
@@ -761,13 +706,11 @@ splitSmartly.searchWithin = (...args) => {
 splitSmartly.search = (...args) => {
   return splitSmartly(...getSplitSmartlyArgs(args, {
     includeSeparatorMode: "ONLY"
-    /* INCLUDE_SEPARATOR_ONLY */
-
   }));
 };
 
 exports.SearchResults = SearchResults;
 exports.createSplitFunction = createSplitFunction;
-exports.default = splitSmartly;
+exports["default"] = splitSmartly;
 exports.splitSmartly = splitSmartly;
-//# sourceMappingURL=split-smartly.cjs.development.js.map
+//# sourceMappingURL=index.cjs.development.cjs.map

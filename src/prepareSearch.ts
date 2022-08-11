@@ -1,12 +1,9 @@
 import {
-	IBrackets,
-	IBracketsMap,
 	IIncludeSeparatorMode,
 	ISeparators,
 	ISplitSettings,
 	ISplitSettingsInput,
 } from './types';
-import { first, isEmpty } from './util';
 import { arrayToPattern } from './util/arrayToPattern';
 import { createSeparatorsSearch } from './util/createSeparatorsSearch';
 import { createBracketsSearch } from './util/createBracketsSearch';

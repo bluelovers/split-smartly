@@ -2,7 +2,7 @@ import { ITextNodeOrText } from './types';
 
 export const once = <T extends (...args: any[]) => any>(fn: T) =>
 {
-	let value, hasValue
+	let value: any, hasValue: any
 	return function (...args)
 	{
 		if (!hasValue)

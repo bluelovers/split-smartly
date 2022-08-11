@@ -12,7 +12,7 @@ import { SearchResults } from './searchResults';
 
 export const createSplitFunction = <M extends IIncludeSeparatorMode>(settings: ISearchSettingsInput<M>): ISplitFunction<M> =>
 {
-	const splitFn = split.bind(settings as ISplitSettings<M>) as ISplitFunctionCore<M> & ThisType<ISplitSettings<M>>
+	const splitFn = split.bind(settings as ISplitSettings<M>) as unknown as ISplitFunctionCore<M> & ThisType<ISplitSettings<M>>
 
 	return Object.assign(splitFn, {
 		getOne<T extends ISearchSettingsInput<IIncludeSeparatorMode> = ISearchSettingsInput<M>>(string: string,

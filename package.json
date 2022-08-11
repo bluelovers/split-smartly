@@ -9,7 +9,9 @@
     "brackets",
     "js",
     "smart",
-    "regexp"
+    "regexp",
+    "create-by-yarn-tool",
+    "create-by-tsdx"
   ],
   "homepage": "https://github.com/bluelovers/split-smartly#readme",
   "bugs": {
@@ -21,52 +23,70 @@
   },
   "license": "MIT",
   "author": "Reutov Dmitry",
-  "main": "dist/index.js",
-  "module": "dist/split-smartly.esm.js",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.esm.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json",
+    "./src/*": "./src/*"
+  },
+  "main": "dist/index.cjs",
+  "unpkg": "dist/index.umd.production.min.cjs",
+  "module": "dist/index.esm.mjs",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
   "directories": {
     "test": "test"
   },
-  "files": [
-    "tsconfig.json",
-    "src/**/*.*",
-    "dist/**/*",
-    "!**/*.test.ts",
-    "!**/*.spec.ts",
-    "!**/*.test.js",
-    "!**/*.spec.js",
-    "!**/__snapshots__/*"
-  ],
   "scripts": {
-    "ci:install": "yarn add tsdx@npm:@bluelovers/tsdx @yarn-tool/require-resolve",
-    "test": "tsdx test",
-    "build": "tsdx build --target node --name split-smartly && yarn run build:dts",
-    "build:dts": "dts-bundle-generator -o ./dist/index.d.ts ./src/index.ts --no-banner --external-inlines ts-type",
-    "npm:publish": "yarn run preversion && npm publish && yarn run postpublishOnly",
-    "npm:publish:bump": "yarn-tool version && yarn run preversion && npm publish && yarn run postpublishOnly",
-    "npm:publish:lerna": "lerna publish --yes --bump patch",
-    "preversion": "echo preversion && yarn run build && yarn run test",
-    "prepublishOnly_": "yarn run prepublishOnly:check-bin && yarn run prepublishOnly:update && yarn run test",
+    "pretest": "echo pretest",
+    "test": "jest --passWithNoTests",
+    "test:jest:clearCache": "jest --clearCache",
+    "posttest": "yarn run build",
+    "install:resetLockfile": "yarn-tool install --reset-lockfile",
+    "build": "yarn run build:tsdx && yarn run build:dts:bundle",
+    "build:dts:bundle": "ynpx dts-bundle-generator -o ./dist/index.d.ts ./src/index.ts --no-banner --inline-declare-global & echo build:dts:bundle",
+    "build:dts:copy": "copy .\\src\\index.d.ts .\\dist\\index.d.ts & echo build:dts",
+    "build:dts:tsc": "yarn run build:dts:tsc:emit && yarn run build:dts:copy",
+    "build:dts:tsc:emit": "tsc --emitDeclarationOnly --declaration --noEmit false",
+    "build:tsdx": "ynpx @bluelovers/tsdx build --target node",
+    "ci:install": "yarn install --frozen-lockfile && yarn add -W typescript@next jest ts-jest ts-node ynpx lerna yarn-tool",
+    "ci:build": "echo ci:build",
+    "npm:publish": "npm publish",
+    "npm:publish:bump": "yarn run version:bump && npm publish",
+    "preversion": "echo preversion && yarn run test",
+    "version": "echo version",
+    "version:bump": "yarn-tool version",
+    "postversion": "echo postversion",
+    "prepublish": "echo prepublish",
+    "prepare": "echo prepare",
+    "prepublishOnly": "yarn run preversion",
     "prepublishOnly:check-bin": "ynpx --quiet @yarn-tool/check-pkg-bin",
     "prepublishOnly:update": "yarn run ncu && yarn run sort-package-json",
-    "postpublish_": "yarn run postpublish:changelog && yarn run postpublish:git:commit && yarn run postpublish:git:tag && yarn run postpublish:git:push",
+    "prepack": "echo prepack",
+    "pack": "echo pack",
+    "postpack": "echo postpack",
+    "publish": "echo publish",
+    "postpublish": "yarn run postpublish:changelog && yarn run postpublish:git:commit && yarn run postpublish:git:tag && yarn run postpublish:git:push",
     "postpublish:changelog": "ynpx --quiet @yarn-tool/changelog && git add ./CHANGELOG.md",
     "postpublish:git:commit": "git commit -m \"chore(release): publish\" . & echo postpublish:git:commit",
     "postpublish:git:push": "git push --follow-tags",
     "postpublish:git:tag": "ynpx --quiet @yarn-tool/tag",
-    "postpublishOnly": "yarn run postpublish:changelog && yarn run postpublish:git:commit && yarn run postpublish:git:tag && yarn run postpublish:git:push",
+    "postpublishOnly": "echo postpublishOnly",
     "ncu": "yarn-tool ncu -u",
-    "sort-package-json": "yarn-tool sort"
+    "sort-package-json": "yarn-tool sort",
+    "tsc:showConfig": "ynpx get-current-tsconfig -p"
   },
   "dependencies": {
-    "ts-type": "^1.2.35"
+    "ts-type": "^2.1.10"
   },
   "devDependencies": {
-    "@bluelovers/tsconfig": "^1.0.22",
-    "@types/jest": "^26.0.23",
-    "dts-bundle-generator": "^5.9.0",
-    "jest": "^27.0.5",
-    "tslib": "^2.3.0"
+    "@bluelovers/tsconfig": "^1.0.30",
+    "@types/jest": "^28.1.6",
+    "jest": "^28.1.3",
+    "tslib": "^2"
   }
 }

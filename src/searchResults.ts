@@ -6,7 +6,7 @@ import {
 	IGetPipeItemByIncludeSeparatorMode,
 	IGetPipeItemBySettings,
 	IIncludeSeparatorMode,
-	IMention,
+	IMention, IMentionsInput,
 	IParameterSeparator,
 	IReturnTypeCheckSeparator,
 	ISearchSettings,
@@ -266,7 +266,7 @@ export class SearchResults<M extends IIncludeSeparatorMode, T extends IGetPipeIt
 				(fragment === close && EnumFindBracketsAction.ACTION_CLOSE) ||
 				(ignoreMode && EnumFindBracketsAction.ACTION_NULL) ||
 				((block = searchSettings.bracketsMap[fragment]) && EnumFindBracketsAction.ACTION_OPEN) ||
-				(searchSettings.mentions?.[fragment] && EnumFindBracketsAction.ACTION_ADD_FRAGMENT)
+				(searchSettings.mentions?.[fragment as keyof IMentionsInput] && EnumFindBracketsAction.ACTION_ADD_FRAGMENT)
 
 			switch (action)
 			{
@@ -297,8 +297,9 @@ export class SearchResults<M extends IIncludeSeparatorMode, T extends IGetPipeIt
 					}
 					break
 
+				// @ts-ignore
 				case EnumFindBracketsAction.ACTION_ADD_FRAGMENT:
-					const mention = searchSettings.mentions[fragment]
+					const mention = searchSettings.mentions[fragment as keyof IMentionsInput]
 					this.currentMentions.push({ mention, index: match.index })
 					break
 			}
