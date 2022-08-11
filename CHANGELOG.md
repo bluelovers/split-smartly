@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.12](https://github.com/bluelovers/split-smartly/compare/split-smartly2@1.1.11...split-smartly2@1.1.12) (2022-08-11)
+
+
+### 🛠　Build System
+
+* update tsdx and deps ([bf7b452](https://github.com/bluelovers/split-smartly/commit/bf7b45201714e3bd8b860d1fe05639689d2c4632))
+
+
+### ⚙️　Continuous Integration
+
+* try fix Cannot find module 'ts-jest' ([564a35d](https://github.com/bluelovers/split-smartly/commit/564a35de3017d817461ed4ab2164e5182eb2fc0a))
+
+
+
+
+
 ## [1.1.11](https://github.com/bluelovers/split-smartly/compare/split-smartly2@1.1.10...split-smartly2@1.1.11) (2021-07-01)
 
 
