@@ -1,13 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`describe '/' 1`] = `"\\\\/"`;
+exports[`describe '/' 1`] = `"\\/"`;
 
 exports[`describe '_' 1`] = `"_"`;
 
-exports[`describe '|' 1`] = `"\\\\|"`;
+exports[`describe '|' 1`] = `"\\|"`;
 
 exports[`describe 'AND' 1`] = `"AND"`;
 
-exports[`describe /p\\d:/gi 1`] = `"p\\\\d:"`;
+exports[`describe /p\\d:/gi 1`] = `"p\\d:"`;
 
 exports[`describe [ 'SELECT ', 'FROM ' ] 1`] = `"SELECT |FROM "`;
