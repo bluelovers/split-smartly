@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.13](https://github.com/bluelovers/split-smartly/compare/split-smartly2@1.1.12...split-smartly2@1.1.13) (2023-03-05)
+
+
+
+### 🛠　Build System
+
+* update tsdx and deps ([3235d2a](https://github.com/bluelovers/split-smartly/commit/3235d2a7fc94c9daff7c25c1fce08424a8ff5a4a))
+
+
+
 ## [1.1.12](https://github.com/bluelovers/split-smartly/compare/split-smartly2@1.1.11...split-smartly2@1.1.12) (2022-08-11)
 
 
