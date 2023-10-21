@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.14](https://github.com/bluelovers/split-smartly/compare/split-smartly2@1.1.13...split-smartly2@1.1.14) (2023-10-21)
+
+
+### BREAKING CHANGES
+
+* update build
+
+
+
+### 🛠　Build System
+
+* update build ([d5545f9](https://github.com/bluelovers/split-smartly/commit/d5545f99217b874972a55b2a59f0bf0e62a4bcc2))
+
+
+
 ## [1.1.13](https://github.com/bluelovers/split-smartly/compare/split-smartly2@1.1.12...split-smartly2@1.1.13) (2023-03-05)
 
 
