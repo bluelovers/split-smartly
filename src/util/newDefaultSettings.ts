@@ -1,6 +1,7 @@
 import {
 	EnumIncludeSeparatorMode,
 	IBrackets,
+	ISplitSettingsInput,
 } from '../types';
 
 export function newDefaultSettings()
@@ -15,5 +16,5 @@ export function newDefaultSettings()
 		trimSeparators: false as const,
 		//check: undefined,
 		defaultBrackets: [['(', ')'], ['[', ']'], ['{', '}']] as IBrackets,
-	}
+	} satisfies ISplitSettingsInput<EnumIncludeSeparatorMode>
 }

@@ -1,5 +1,6 @@
 import { SearchResults } from './searchResults';
 import { ITSValueOrArray } from 'ts-type/lib/type/base';
+import { ITSTypeAndStringLiteral } from 'ts-type/lib/helper/string';
 
 export type IBracketsItem = [open: IBracketsObject["open"], close: IBracketsObject["close"], searchLevels?: IBracketsObject["searchLevels"], ignoreMode?: IBracketsObject["ignoreMode"]];
 
@@ -130,12 +131,11 @@ export type IGetIncludeSeparatorModeBySettings<T extends ISearchSettingsInput<II
 	? M
 	: IIncludeSeparatorMode
 export type IGetPipeItemBySettings<T extends ISearchSettingsInput<IIncludeSeparatorMode>> = IGetPipeItemByIncludeSeparatorMode<IGetIncludeSeparatorModeBySettings<T>>
-export type IIncludeSeparatorMode =
-	EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_NONE
+export type IIncludeSeparatorMode = ITSTypeAndStringLiteral<EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_NONE
 	| EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_SEPARATELY
 	| EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_LEFT
 	| EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_RIGHT
-	| EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_ONLY
+	| EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_ONLY>
 export type ISeparators = ITSValueOrArray<string | RegExp>;
 export type ISeparatorsNode = ISeparators | ITextNodeSeparator;
 

@@ -1,6 +1,8 @@
 // @ts-check
-
 const { basename, extname, dirname } = require('path');
+
+// @ts-ignore
+process.env.TSDX_FORMAT = 'esm';
 
 /**
  * // @type { import('@jest/types').Config.InitialOptions }

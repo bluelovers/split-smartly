@@ -1,4 +1,5 @@
-import splitSmartly, { EnumIncludeSeparatorMode } from '../src/index';
+import splitSmartly from '../src/index';
+import { EnumIncludeSeparatorMode } from '../src/types';
 
 const reDoubleVerticalBar = /\s*\|\|\s*/g;
 

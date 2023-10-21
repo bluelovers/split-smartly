@@ -28,13 +28,16 @@ const getSplitSmartlyArgs = (args, extraSettings) => {
   } else if (args.length === 3) {
     if (!extraSettings) return args;
   } else if (args.length === 1) {
+    // @ts-ignore
     const arg = first(args);
     if (typeof arg === 'string') {
+      // @ts-ignore
       args.push(',', {});
     } else if (Array.isArray(arg)) {
       args.unshift(null);
       args.push({});
     } else if (typeof arg === 'object') {
+      // @ts-ignore
       args.unshift(null, ',');
     }
   } else if (args.length === 2) {
@@ -48,6 +51,7 @@ const getSplitSmartlyArgs = (args, extraSettings) => {
   } else if (args.length > 3) {
     throw new RangeError('Too much arguments passed to splitSmartly function!!!');
   }
+  // @ts-ignore
   if (extraSettings) args[2] = {
     ...args[2],
     ...extraSettings
@@ -84,7 +88,9 @@ function createSeparatorsSearch(settings) {
 }
 
 function createBracketsSearch(settings) {
-  const patternParts = Object.entries(settings.bracketsMap).flatMap(([, {
+  const patternParts = Object.entries(settings.bracketsMap)
+  // @ts-ignore
+  .flatMap(([, {
     close,
     open
   }]) => close !== open ? [open, close] : open).concat(Object.keys(settings.mentions || {})).filter(Boolean);
@@ -140,13 +146,16 @@ function handleBracketsMapOptions(brackets, settings) {
 }
 function createBracketsMap(settings) {
   let brackets = settings.brackets = normalizeBrackets(settings.brackets, settings.defaultBrackets);
+  //let brackets = settings.brackets.slice();
   brackets = handleBracketsMapOptions(brackets, settings);
   settings.bracketsMap = buildBracketsMap(brackets, settings.searchWithin);
   return settings;
 }
 
 function mergeSettings(_this, settings) {
+  // @ts-ignore
   if (!settings) return _this;
+  // @ts-ignore
   settings = {
     ..._this,
     ...settings
@@ -154,6 +163,7 @@ function mergeSettings(_this, settings) {
   if (['brackets', 'mentions'].some(prop => prop in settings)) {
     settings.init();
   }
+  // @ts-ignore
   return settings;
 }
 
@@ -174,10 +184,11 @@ function newDefaultSettings() {
     brackets: [],
     mentions: [],
     ignoreInsideQuotes: true,
-    includeSeparatorMode: "NONE",
+    includeSeparatorMode: "NONE" /* EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_NONE */,
     ignoreCase: true,
     trimResult: true,
     trimSeparators: false,
+    //check: undefined,
     defaultBrackets: [['(', ')'], ['[', ']'], ['{', '}']]
   };
 }
@@ -358,23 +369,23 @@ class SearchResults {
     let [text, separator, checked] = this.checkSeparator(pSeparator);
     if (!checked) return false;
     switch (this.searchSettings.includeSeparatorMode) {
-      case "SEPARATELY":
+      case "SEPARATELY" /* EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_SEPARATELY */:
         this.pushToPipe(text);
         if (separator) {
           this.pushToPipe(separator);
         }
         break;
-      case "LEFT":
+      case "LEFT" /* EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_LEFT */:
         this.pushToPipe([text, separator]);
         break;
-      case "RIGHT":
+      case "RIGHT" /* EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_RIGHT */:
         const textIsEmpty = !(typeof text === 'object' ? text.text : text);
         if (!textIsEmpty || this.lastSeparator) {
           this.pushToPipe([this.lastSeparator, text]);
         }
         this.lastSeparator = separator;
         break;
-      case "ONLY":
+      case "ONLY" /* EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_ONLY */:
         if (separator) this.pushToPipe(separator);
         break;
       default:
@@ -395,6 +406,7 @@ class SearchResults {
       searchWithin
     } = searchSettings;
     const condition = searchWithin ? () => this.pipeIsEmpty : () => {
+      // avoid run forever when string.length = 1
       if (typeof freeArea.start === 'number' && freeArea.start === freeArea.end) {
         return false;
       }
@@ -415,9 +427,10 @@ class SearchResults {
         searchLevels
       } = last(brackets) || {};
       let block;
-      const action = fragment === close && 1 || ignoreMode && 4 || (block = searchSettings.bracketsMap[fragment]) && 2 || ((_searchSettings$menti = searchSettings.mentions) === null || _searchSettings$menti === void 0 ? void 0 : _searchSettings$menti[fragment]) && 3;
+      //const ACTION_CLOSE = 1, ACTION_OPEN = 2, ACTION_ADD_FRAGMENT = 3, ACTION_NULL = 4
+      const action = fragment === close && 1 /* EnumFindBracketsAction.ACTION_CLOSE */ || ignoreMode && 4 /* EnumFindBracketsAction.ACTION_NULL */ || (block = searchSettings.bracketsMap[fragment]) && 2 /* EnumFindBracketsAction.ACTION_OPEN */ || ((_searchSettings$menti = searchSettings.mentions) === null || _searchSettings$menti === void 0 ? void 0 : _searchSettings$menti[fragment]) && 3 /* EnumFindBracketsAction.ACTION_ADD_FRAGMENT */;
       switch (action) {
-        case 1:
+        case 1 /* EnumFindBracketsAction.ACTION_CLOSE */:
           const bracketData = brackets.pop();
           if (searchWithin) {
             if (searchLevels === true || searchLevels.includes(brackets.length + 1)) {
@@ -432,7 +445,7 @@ class SearchResults {
             }
           }
           break;
-        case 2:
+        case 2 /* EnumFindBracketsAction.ACTION_OPEN */:
           brackets.push({
             ...block,
             openPosition: match.index + fragment.length
@@ -441,7 +454,8 @@ class SearchResults {
             freeArea.end = match.index;
           }
           break;
-        case 3:
+        // @ts-ignore
+        case 3 /* EnumFindBracketsAction.ACTION_ADD_FRAGMENT */:
           const mention = searchSettings.mentions[fragment];
           this.currentMentions.push({
             mention,
@@ -498,6 +512,7 @@ class SearchResults {
     }
     return res;
   }
+  // @ts-ignore
   *[Symbol.iterator]() {
     this.prepareSearch();
     const object = this;
@@ -508,6 +523,16 @@ class SearchResults {
         yield value;
       }
     } while (value !== null);
+    /*
+    return {
+        //object,
+         next () {
+            const value = object.getNext()
+            if (value === null) return { done: true }
+             return { value, done: false }
+        }
+    }
+     */
   }
 }
 
@@ -529,12 +554,14 @@ const createSplitFunction = settings => {
       if (isNaN(index)) {
         throw new TypeError('second parameter of `getOne` function should be index');
       }
+      // @ts-ignore
       return splitFn(string, {
         ...settings,
         indexes: index
       });
     },
     getFirst(string, settings = {}) {
+      // @ts-ignore
       return splitFn(string, {
         ...settings,
         indexes: 0
@@ -544,12 +571,14 @@ const createSplitFunction = settings => {
       if (!Array.isArray(indexes)) {
         throw new TypeError('second parameter of `getOne` function should be array of indexes');
       }
+      // @ts-ignore
       return splitFn(string, {
         ...settings,
         indexes
       });
     },
     getIterator(string, settings = {}) {
+      // @ts-ignore
       return splitFn(string, {
         ...settings,
         returnIterator: true
@@ -558,14 +587,14 @@ const createSplitFunction = settings => {
   });
 };
 
-var EnumIncludeSeparatorMode;
+var EnumIncludeSeparatorMode$1;
 (function (EnumIncludeSeparatorMode) {
   EnumIncludeSeparatorMode["INCLUDE_SEPARATOR_NONE"] = "NONE";
   EnumIncludeSeparatorMode["INCLUDE_SEPARATOR_SEPARATELY"] = "SEPARATELY";
   EnumIncludeSeparatorMode["INCLUDE_SEPARATOR_LEFT"] = "LEFT";
   EnumIncludeSeparatorMode["INCLUDE_SEPARATOR_RIGHT"] = "RIGHT";
   EnumIncludeSeparatorMode["INCLUDE_SEPARATOR_ONLY"] = "ONLY";
-})(EnumIncludeSeparatorMode || (EnumIncludeSeparatorMode = {}));
+})(EnumIncludeSeparatorMode$1 || (EnumIncludeSeparatorMode$1 = {}));
 var EnumFindBracketsAction;
 (function (EnumFindBracketsAction) {
   EnumFindBracketsAction[EnumFindBracketsAction["ACTION_CLOSE"] = 1] = "ACTION_CLOSE";
@@ -578,6 +607,7 @@ function splitSmartly(...args) {
   let [string, separators, settings] = getSplitSmartlyArgs(args);
   const splitSettings = prepareSearch(separators, settings);
   const splitFn = createSplitFunction(splitSettings);
+  // @ts-ignore
   return string !== null ? splitFn(string) : splitFn;
 }
 splitSmartly.searchWithin = (...args) => {
@@ -588,7 +618,9 @@ splitSmartly.searchWithin = (...args) => {
       args.unshift(null);
     }
   }
+  // @ts-ignore
   if (typeof args[1] !== 'object' || !args[1].brackets) {
+    // @ts-ignore
     args[1] = {
       brackets: args[1]
     };
@@ -600,9 +632,10 @@ splitSmartly.searchWithin = (...args) => {
 };
 splitSmartly.search = (...args) => {
   return splitSmartly(...getSplitSmartlyArgs(args, {
-    includeSeparatorMode: "ONLY"
+    includeSeparatorMode: "ONLY" /* EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_ONLY */
   }));
 };
+// @ts-ignore
 {
   Object.defineProperty(splitSmartly, "__esModule", {
     value: true
@@ -618,6 +651,16 @@ splitSmartly.search = (...args) => {
   });
   Object.defineProperty(splitSmartly, 'SearchResults', {
     value: SearchResults
+  });
+  // @ts-ignore
+  Object.defineProperty(splitSmartly, 'EnumIncludeSeparatorMode', {
+    value: EnumIncludeSeparatorMode
+  });
+  Object.defineProperty(splitSmartly, 'getSplitSmartlyArgs', {
+    value: getSplitSmartlyArgs
+  });
+  Object.defineProperty(splitSmartly, 'prepareSearch', {
+    value: prepareSearch
   });
 }
 

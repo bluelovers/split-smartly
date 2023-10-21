@@ -13,7 +13,7 @@ import { prepareSearch } from './prepareSearch';
 import { SearchResults } from './searchResults';
 import { createSplitFunction } from './createSplitFunction';
 
-export { SearchResults, createSplitFunction }
+export { SearchResults, createSplitFunction, getSplitSmartlyArgs, prepareSearch }
 export { EnumIncludeSeparatorMode } from "./types"
 
 export function splitSmartly<M extends IIncludeSeparatorMode>(...args: IParametersSplitSmartlyReturnQuery<M>): ISplitFunction<M>
@@ -81,5 +81,10 @@ if (process.env.TSDX_FORMAT !== 'esm')
 
 	Object.defineProperty(splitSmartly, 'createSplitFunction', { value: createSplitFunction });
 	Object.defineProperty(splitSmartly, 'SearchResults', { value: SearchResults });
+
+	// @ts-ignore
+	Object.defineProperty(splitSmartly, 'EnumIncludeSeparatorMode', { value: EnumIncludeSeparatorMode });
+	Object.defineProperty(splitSmartly, 'getSplitSmartlyArgs', { value: getSplitSmartlyArgs });
+	Object.defineProperty(splitSmartly, 'prepareSearch', { value: prepareSearch });
 
 }

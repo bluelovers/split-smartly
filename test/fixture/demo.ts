@@ -30,8 +30,8 @@ export const fixtureDemo = [
 	['one , two , "three , four" , five , six'],
 	[['SELECT ', 'FROM ']],
 	[{ includeSeparatorMode: 'RIGHT', ignoreCase: false }],
-	[{}],
+	[{} as any],
 
 	[newDefaultSettings()],
 
-] as IParametersSplitSmartly<IIncludeSeparatorMode>[]
+] satisfies IParametersSplitSmartly<IIncludeSeparatorMode>[]

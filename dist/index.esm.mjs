@@ -370,5 +370,5 @@ function splitSmartly(...t) {
   includeSeparatorMode: "ONLY"
 }));
 
-export { e as EnumIncludeSeparatorMode, SearchResults, createSplitFunction, splitSmartly as default, splitSmartly };
+export { e as EnumIncludeSeparatorMode, SearchResults, createSplitFunction, splitSmartly as default, getSplitSmartlyArgs, prepareSearch, splitSmartly };
 //# sourceMappingURL=index.esm.mjs.map
