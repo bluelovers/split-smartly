@@ -70,21 +70,3 @@ export const INCLUDE_SEPARATOR_ONLY = EnumIncludeSeparatorMode.INCLUDE_SEPARATOR
  */
 
 export default splitSmartly
-
-// @ts-ignore
-if (process.env.TSDX_FORMAT !== 'esm')
-{
-	Object.defineProperty(splitSmartly, "__esModule", { value: true });
-
-	Object.defineProperty(splitSmartly, 'splitSmartly', { value: splitSmartly });
-	Object.defineProperty(splitSmartly, 'default', { value: splitSmartly });
-
-	Object.defineProperty(splitSmartly, 'createSplitFunction', { value: createSplitFunction });
-	Object.defineProperty(splitSmartly, 'SearchResults', { value: SearchResults });
-
-	// @ts-ignore
-	Object.defineProperty(splitSmartly, 'EnumIncludeSeparatorMode', { value: EnumIncludeSeparatorMode });
-	Object.defineProperty(splitSmartly, 'getSplitSmartlyArgs', { value: getSplitSmartlyArgs });
-	Object.defineProperty(splitSmartly, 'prepareSearch', { value: prepareSearch });
-
-}

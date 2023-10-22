@@ -1,5 +1,9 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: !0
+});
+
 const once = e => {
   let t, r;
   return function(...s) {
@@ -166,22 +170,22 @@ class SearchResults {
     const {string: t} = this, {check: r, includePositions: s, mentions: n} = this.searchSettings;
     let {0: i = "", index: a = t.length, searchWithinData: o} = null != e ? e : {};
     const c = i.length, h = o ? o.openPosition : this.position;
-    let l = t.substring(h, a);
-    i || (this.isDone = !0), l = this.trimResultText(l), i = this.trimSeparatorText(i);
-    let p, u = o ? [ o.open, o.close ] : i;
-    if (s && (l = {
-      text: l,
+    let p = t.substring(h, a);
+    i || (this.isDone = !0), p = this.trimResultText(p), i = this.trimSeparatorText(i);
+    let l, u = o ? [ o.open, o.close ] : i;
+    if (s && (p = {
+      text: p,
       position: h
     }, u = {
       text: u,
       position: a,
       isSeparator: !0
     }), n) {
-      l = "string" == typeof l ? {
-        text: l
-      } : l;
+      p = "string" == typeof p ? {
+        text: p
+      } : p;
       const [e, t] = this.getMentions(h, a);
-      e && (l.mentions = e, p = t);
+      e && (p.mentions = e, l = t);
     }
     if (r && i) {
       const e = isNaN(this.tempPosition) ? h : this.tempPosition;
@@ -207,7 +211,7 @@ class SearchResults {
       })) return [];
       delete this.tempPosition;
     }
-    return p && (this.currentMentions = p), this.position = a + c, [ l, u, !0 ];
+    return l && (this.currentMentions = l), this.position = a + c, [ p, u, !0 ];
   }
   pushToPipe(e) {
     if (this.indexes) {
@@ -252,9 +256,9 @@ class SearchResults {
         r.end = e.length - 1;
         continue;
       }
-      const l = o[0], {close: p, ignoreMode: u, searchLevels: g} = (h = t)[h.length - 1] || {};
+      const p = o[0], {close: l, ignoreMode: u, searchLevels: g} = (h = t)[h.length - 1] || {};
       let f;
-      switch ((l === p ? 1 : u && 4) || (f = s.bracketsMap[l]) && 2 || (null === (c = s.mentions) || void 0 === c ? void 0 : c[l]) && 3) {
+      switch ((p === l ? 1 : u && 4) || (f = s.bracketsMap[p]) && 2 || (null === (c = s.mentions) || void 0 === c ? void 0 : c[p]) && 3) {
        case 1:
         const e = t.pop();
         a ? (!0 === g || g.includes(t.length + 1)) && this.addToPipe(Object.assign(o, {
@@ -265,13 +269,13 @@ class SearchResults {
        case 2:
         t.push({
           ...f,
-          openPosition: o.index + l.length
+          openPosition: o.index + p.length
         }), 1 !== t.length || a || (r.end = o.index);
         break;
 
        case 3:
         this.currentMentions.push({
-          mention: s.mentions[l],
+          mention: s.mentions[p],
           index: o.index
         });
       }
@@ -357,10 +361,9 @@ function splitSmartly(...e) {
   return null !== t ? i(t) : i;
 }
 
-!function(e) {
-  e.INCLUDE_SEPARATOR_NONE = "NONE", e.INCLUDE_SEPARATOR_SEPARATELY = "SEPARATELY", 
-  e.INCLUDE_SEPARATOR_LEFT = "LEFT", e.INCLUDE_SEPARATOR_RIGHT = "RIGHT", e.INCLUDE_SEPARATOR_ONLY = "ONLY";
-}(t || (t = {})), function(e) {
+exports.EnumIncludeSeparatorMode = void 0, (t = exports.EnumIncludeSeparatorMode || (exports.EnumIncludeSeparatorMode = {})).INCLUDE_SEPARATOR_NONE = "NONE", 
+t.INCLUDE_SEPARATOR_SEPARATELY = "SEPARATELY", t.INCLUDE_SEPARATOR_LEFT = "LEFT", 
+t.INCLUDE_SEPARATOR_RIGHT = "RIGHT", t.INCLUDE_SEPARATOR_ONLY = "ONLY", function(e) {
   e[e.ACTION_CLOSE = 1] = "ACTION_CLOSE", e[e.ACTION_OPEN = 2] = "ACTION_OPEN", e[e.ACTION_ADD_FRAGMENT = 3] = "ACTION_ADD_FRAGMENT", 
   e[e.ACTION_NULL = 4] = "ACTION_NULL";
 }(r || (r = {})), splitSmartly.searchWithin = (...e) => (1 === e.length && ("string" == typeof e[0] ? e.push(null, {}) : e.unshift(null)), 
@@ -370,21 +373,7 @@ function splitSmartly(...e) {
   searchWithin: !0
 }))), splitSmartly.search = (...e) => splitSmartly(...getSplitSmartlyArgs(e, {
   includeSeparatorMode: "ONLY"
-})), Object.defineProperty(splitSmartly, "__esModule", {
-  value: !0
-}), Object.defineProperty(splitSmartly, "splitSmartly", {
-  value: splitSmartly
-}), Object.defineProperty(splitSmartly, "default", {
-  value: splitSmartly
-}), Object.defineProperty(splitSmartly, "createSplitFunction", {
-  value: createSplitFunction
-}), Object.defineProperty(splitSmartly, "SearchResults", {
-  value: SearchResults
-}), Object.defineProperty(splitSmartly, "EnumIncludeSeparatorMode", {
-  value: EnumIncludeSeparatorMode
-}), Object.defineProperty(splitSmartly, "getSplitSmartlyArgs", {
-  value: getSplitSmartlyArgs
-}), Object.defineProperty(splitSmartly, "prepareSearch", {
-  value: prepareSearch
-}), module.exports = splitSmartly;
+})), exports.SearchResults = SearchResults, exports.createSplitFunction = createSplitFunction, 
+exports.default = splitSmartly, exports.getSplitSmartlyArgs = getSplitSmartlyArgs, 
+exports.prepareSearch = prepareSearch, exports.splitSmartly = splitSmartly;
 //# sourceMappingURL=index.cjs.production.min.cjs.map

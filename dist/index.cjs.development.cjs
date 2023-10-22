@@ -1,5 +1,7 @@
 'use strict';
 
+Object.defineProperty(exports, '__esModule', { value: true });
+
 const once = fn => {
   let value, hasValue;
   return function (...args) {
@@ -587,14 +589,14 @@ const createSplitFunction = settings => {
   });
 };
 
-var EnumIncludeSeparatorMode$1;
+exports.EnumIncludeSeparatorMode = void 0;
 (function (EnumIncludeSeparatorMode) {
   EnumIncludeSeparatorMode["INCLUDE_SEPARATOR_NONE"] = "NONE";
   EnumIncludeSeparatorMode["INCLUDE_SEPARATOR_SEPARATELY"] = "SEPARATELY";
   EnumIncludeSeparatorMode["INCLUDE_SEPARATOR_LEFT"] = "LEFT";
   EnumIncludeSeparatorMode["INCLUDE_SEPARATOR_RIGHT"] = "RIGHT";
   EnumIncludeSeparatorMode["INCLUDE_SEPARATOR_ONLY"] = "ONLY";
-})(EnumIncludeSeparatorMode$1 || (EnumIncludeSeparatorMode$1 = {}));
+})(exports.EnumIncludeSeparatorMode || (exports.EnumIncludeSeparatorMode = {}));
 var EnumFindBracketsAction;
 (function (EnumFindBracketsAction) {
   EnumFindBracketsAction[EnumFindBracketsAction["ACTION_CLOSE"] = 1] = "ACTION_CLOSE";
@@ -635,35 +637,11 @@ splitSmartly.search = (...args) => {
     includeSeparatorMode: "ONLY" /* EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_ONLY */
   }));
 };
-// @ts-ignore
-{
-  Object.defineProperty(splitSmartly, "__esModule", {
-    value: true
-  });
-  Object.defineProperty(splitSmartly, 'splitSmartly', {
-    value: splitSmartly
-  });
-  Object.defineProperty(splitSmartly, 'default', {
-    value: splitSmartly
-  });
-  Object.defineProperty(splitSmartly, 'createSplitFunction', {
-    value: createSplitFunction
-  });
-  Object.defineProperty(splitSmartly, 'SearchResults', {
-    value: SearchResults
-  });
-  // @ts-ignore
-  Object.defineProperty(splitSmartly, 'EnumIncludeSeparatorMode', {
-    value: EnumIncludeSeparatorMode
-  });
-  Object.defineProperty(splitSmartly, 'getSplitSmartlyArgs', {
-    value: getSplitSmartlyArgs
-  });
-  Object.defineProperty(splitSmartly, 'prepareSearch', {
-    value: prepareSearch
-  });
-}
 
-// @ts-ignore
-module.exports = splitSmartly;
+exports.SearchResults = SearchResults;
+exports.createSplitFunction = createSplitFunction;
+exports.default = splitSmartly;
+exports.getSplitSmartlyArgs = getSplitSmartlyArgs;
+exports.prepareSearch = prepareSearch;
+exports.splitSmartly = splitSmartly;
 //# sourceMappingURL=index.cjs.development.cjs.map
