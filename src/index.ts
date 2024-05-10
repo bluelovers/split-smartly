@@ -15,6 +15,7 @@ import { getSplitSmartlyArgs } from './util/getSplitSmartlyArgs';
 import { prepareSearch } from './prepareSearch';
 
 export { SearchResults } from './searchResults';
+export { newDefaultSettings, newDefaultBrackets } from './util/newDefaultSettings';
 
 export { createSplitFunction, getSplitSmartlyArgs, prepareSearch }
 export { EnumIncludeSeparatorMode }
