@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1](https://github.com/bluelovers/split-smartly/compare/split-smartly2@1.1.16...split-smartly2@2.0.1) (2024-05-10)
+
+
+### BREAKING CHANGES
+
+* remove splitSmartly.searchWithin splitSmartly.search
+
+
+
+### 📦　Code Refactoring
+
+* remove splitSmartly.searchWithin splitSmartly.search ([9eba397](https://github.com/bluelovers/split-smartly/commit/9eba3970ee3b213fcb7f6eda791687ffee26e0bd))
+
+
+
 ## [1.1.16](https://github.com/bluelovers/split-smartly/compare/split-smartly2@1.1.15...split-smartly2@1.1.16) (2024-05-10)
 
 
