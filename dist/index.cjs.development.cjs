@@ -548,6 +548,9 @@ function initSettings(settings) {
   return settings.createBracketsMap().createBracketsSearch().createSeparatorsSearch();
 }
 
+function newDefaultBrackets() {
+  return [['(', ')'], ['[', ']'], ['{', '}']];
+}
 function newDefaultSettings() {
   return {
     brackets: [],
@@ -557,7 +560,7 @@ function newDefaultSettings() {
     ignoreCase: true,
     trimResult: true,
     trimSeparators: false,
-    defaultBrackets: [['(', ')'], ['[', ']'], ['{', '}']]
+    defaultBrackets: newDefaultBrackets()
   };
 }
 
@@ -640,6 +643,8 @@ exports._splitSmartlyCore = _splitSmartlyCore;
 exports.createSplitFunction = createSplitFunction;
 exports.default = splitSmartly;
 exports.getSplitSmartlyArgs = getSplitSmartlyArgs;
+exports.newDefaultBrackets = newDefaultBrackets;
+exports.newDefaultSettings = newDefaultSettings;
 exports.prepareSearch = prepareSearch;
 exports.search = search;
 exports.searchWithin = searchWithin;

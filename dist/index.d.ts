@@ -209,6 +209,30 @@ export declare const getSplitSmartlyArgs: <M extends IIncludeSeparatorMode, M2 e
 	ISplitSettings<M2>
 ];
 export declare const prepareSearch: <M extends IIncludeSeparatorMode>(separators: ISeparators, settings: ISplitSettingsInput<M>) => ISplitSettings<M>;
+export declare function newDefaultBrackets(): [
+	[
+		"(",
+		")"
+	],
+	[
+		"[",
+		"]"
+	],
+	[
+		"{",
+		"}"
+	]
+];
+export declare function newDefaultSettings(): {
+	brackets: IBrackets;
+	mentions: string[];
+	ignoreInsideQuotes: true;
+	includeSeparatorMode: EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_NONE;
+	ignoreCase: true;
+	trimResult: true;
+	trimSeparators: false;
+	defaultBrackets: IBrackets;
+};
 export declare function _splitSmartlyCore<M extends IIncludeSeparatorMode>(separators: ISeparators, settings: ISplitSettings<M>): {
 	splitSettings: ISplitSettings<M>;
 	splitFn: ISplitFunction<M>;

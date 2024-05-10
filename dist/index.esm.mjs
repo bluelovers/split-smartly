@@ -74,26 +74,26 @@ class SearchResults {
   checkSeparator(t) {
     const {string: e} = this, {check: r, includePositions: s, mentions: n} = this.searchSettings;
     let {0: i = "", index: a = e.length, searchWithinData: o} = null != t ? t : {};
-    const h = i.length, c = o ? o.openPosition : this.position;
-    let p = e.substring(c, a);
-    i || (this.isDone = !0), p = this.trimResultText(p), i = this.trimSeparatorText(i);
-    let l, u = o ? [ o.open, o.close ] : i;
-    if (s && (p = {
-      text: p,
-      position: c
+    const c = i.length, h = o ? o.openPosition : this.position;
+    let l = e.substring(h, a);
+    i || (this.isDone = !0), l = this.trimResultText(l), i = this.trimSeparatorText(i);
+    let p, u = o ? [ o.open, o.close ] : i;
+    if (s && (l = {
+      text: l,
+      position: h
     }, u = {
       text: u,
       position: a,
       isSeparator: !0
     }), n) {
-      p = "string" == typeof p ? {
-        text: p
-      } : p;
-      const [t, e] = this.getMentions(c, a);
-      t && (p.mentions = t, l = e);
+      l = "string" == typeof l ? {
+        text: l
+      } : l;
+      const [t, e] = this.getMentions(h, a);
+      t && (l.mentions = t, p = e);
     }
     if (r && i) {
-      const t = isNaN(this.tempPosition) ? c : this.tempPosition;
+      const t = isNaN(this.tempPosition) ? h : this.tempPosition;
       this.tempPosition = a + i.length;
       const s = this;
       if (!r({
@@ -116,7 +116,7 @@ class SearchResults {
       })) return [];
       delete this.tempPosition;
     }
-    return l && (this.currentMentions = l), this.position = a + h, [ p, u, !0 ];
+    return p && (this.currentMentions = p), this.position = a + c, [ l, u, !0 ];
   }
   pushToPipe(t) {
     if (this.indexes) {
@@ -154,16 +154,16 @@ class SearchResults {
   findBrackets() {
     const {searchString: t, brackets: e, freeArea: r, searchSettings: s} = this, {bracketsSearch: n, separatorSearch: i, searchWithin: a} = s, o = a ? () => this.pipeIsEmpty : () => ("number" != typeof r.start || r.start !== r.end) && !r.end;
     for (;o(); ) {
-      var h;
+      var c;
       const o = n.exec(t);
       if (!o) {
         if (a || isNaN(r.start)) return !1;
         r.end = t.length - 1;
         continue;
       }
-      const p = o[0], {close: l, ignoreMode: u, searchLevels: g} = (c = e)[c.length - 1] || {};
+      const l = o[0], {close: p, ignoreMode: u, searchLevels: g} = (h = e)[h.length - 1] || {};
       let f;
-      switch ((p === l ? 1 : u && 4) || (f = s.bracketsMap[p]) && 2 || (null === (h = s.mentions) || void 0 === h ? void 0 : h[p]) && 3) {
+      switch ((l === p ? 1 : u && 4) || (f = s.bracketsMap[l]) && 2 || (null === (c = s.mentions) || void 0 === c ? void 0 : c[l]) && 3) {
        case 1:
         const t = e.pop();
         a ? (!0 === g || g.includes(e.length + 1)) && this.addToPipe(Object.assign(o, {
@@ -174,18 +174,18 @@ class SearchResults {
        case 2:
         e.push({
           ...f,
-          openPosition: o.index + p.length
+          openPosition: o.index + l.length
         }), 1 !== e.length || a || (r.end = o.index);
         break;
 
        case 3:
         this.currentMentions.push({
-          mention: s.mentions[p],
+          mention: s.mentions[l],
           index: o.index
         });
       }
     }
-    var c;
+    var h;
     return !0;
   }
   findSeparator(t) {
@@ -271,6 +271,23 @@ const createSplitFunction = t => {
 };
 
 let r;
+
+function newDefaultBrackets() {
+  return [ [ "(", ")" ], [ "[", "]" ], [ "{", "}" ] ];
+}
+
+function newDefaultSettings() {
+  return {
+    brackets: [],
+    mentions: [],
+    ignoreInsideQuotes: !0,
+    includeSeparatorMode: "NONE",
+    ignoreCase: !0,
+    trimResult: !0,
+    trimSeparators: !1,
+    defaultBrackets: [ [ "(", ")" ], [ "[", "]" ], [ "{", "}" ] ]
+  };
+}
 
 const prepareSearch = (t, e) => {
   const s = {
@@ -388,5 +405,5 @@ function search(...t) {
 
 splitSmartly.searchWithin = searchWithin, splitSmartly.search = search;
 
-export { t as EnumIncludeSeparatorMode, SearchResults, _splitSmartlyCore, createSplitFunction, splitSmartly as default, getSplitSmartlyArgs, prepareSearch, search, searchWithin, splitSmartly };
+export { t as EnumIncludeSeparatorMode, SearchResults, _splitSmartlyCore, createSplitFunction, splitSmartly as default, getSplitSmartlyArgs, newDefaultBrackets, newDefaultSettings, prepareSearch, search, searchWithin, splitSmartly };
 //# sourceMappingURL=index.esm.mjs.map

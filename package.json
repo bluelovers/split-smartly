@@ -90,10 +90,10 @@
     "ts-type": "^3.0.1"
   },
   "devDependencies": {
-    "@bluelovers/tsconfig": "^1.0.34",
-    "@types/jest": "^29.5.6",
-    "@types/node": "^20.8.7",
-    "tslib": "^2"
+    "@bluelovers/tsconfig": "^1.0.35",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.12.11",
+    "tslib": "^2.6.2"
   },
   "packageManager": "yarn@1.22.19"
 }
