@@ -7,9 +7,9 @@ import {
 } from '../types';
 import { first } from '../util';
 
-export const getSplitSmartlyArgs = <M extends IIncludeSeparatorMode, M2 extends IIncludeSeparatorMode = M>(args: IParametersSplitSmartly<M>,
+export function getSplitSmartlyArgs<M extends IIncludeSeparatorMode, M2 extends IIncludeSeparatorMode = M>(args: IParametersSplitSmartly<M>,
 	extraSettings?: ISplitSettingsInput<M2>,
-): [string, ISeparators, ISplitSettings<M2>] =>
+): [string, ISeparators, ISplitSettings<M2>]
 {
 
 	if (!args?.length)

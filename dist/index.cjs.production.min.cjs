@@ -1,34 +1,34 @@
 "use strict";
 
-var e, t;
+var t, e;
 
 Object.defineProperty(exports, "__esModule", {
   value: !0
-}), exports.EnumIncludeSeparatorMode = void 0, (e = exports.EnumIncludeSeparatorMode || (exports.EnumIncludeSeparatorMode = {})).INCLUDE_SEPARATOR_NONE = "NONE", 
-e.INCLUDE_SEPARATOR_SEPARATELY = "SEPARATELY", e.INCLUDE_SEPARATOR_LEFT = "LEFT", 
-e.INCLUDE_SEPARATOR_RIGHT = "RIGHT", e.INCLUDE_SEPARATOR_ONLY = "ONLY", function(e) {
-  e[e.ACTION_CLOSE = 1] = "ACTION_CLOSE", e[e.ACTION_OPEN = 2] = "ACTION_OPEN", e[e.ACTION_ADD_FRAGMENT = 3] = "ACTION_ADD_FRAGMENT", 
-  e[e.ACTION_NULL = 4] = "ACTION_NULL";
-}(t || (t = {}));
+}), exports.EnumIncludeSeparatorMode = void 0, (t = exports.EnumIncludeSeparatorMode || (exports.EnumIncludeSeparatorMode = {})).INCLUDE_SEPARATOR_NONE = "NONE", 
+t.INCLUDE_SEPARATOR_SEPARATELY = "SEPARATELY", t.INCLUDE_SEPARATOR_LEFT = "LEFT", 
+t.INCLUDE_SEPARATOR_RIGHT = "RIGHT", t.INCLUDE_SEPARATOR_ONLY = "ONLY", function(t) {
+  t[t.ACTION_CLOSE = 1] = "ACTION_CLOSE", t[t.ACTION_OPEN = 2] = "ACTION_OPEN", t[t.ACTION_ADD_FRAGMENT = 3] = "ACTION_ADD_FRAGMENT", 
+  t[t.ACTION_NULL = 4] = "ACTION_NULL";
+}(e || (e = {}));
 
-const once = e => {
-  let t, r;
+const once = t => {
+  let e, r;
   return function(...s) {
-    return r || (t = e(...s), r = !0), t;
+    return r || (e = t(...s), r = !0), e;
   };
-}, isEmpty = e => {
-  if (!e) return !0;
-  if (Array.isArray(e)) {
-    if (0 === e.length) return !0;
-  } else if ("object" == typeof e && 0 === Object.keys(e).length) return !0;
+}, isEmpty = t => {
+  if (!t) return !0;
+  if (Array.isArray(t)) {
+    if (0 === t.length) return !0;
+  } else if ("object" == typeof t && 0 === Object.keys(t).length) return !0;
   return !1;
-}, first = e => e[0];
+}, first = t => t[0];
 
-function buildIndexesObject(e) {
-  const t = [ e ].flat().filter(Boolean);
-  return !isEmpty(t) && {
-    values: new Set(t),
-    max: Math.max(...t),
+function buildIndexesObject(t) {
+  const e = [ t ].flat().filter(Boolean);
+  return !isEmpty(e) && {
+    values: new Set(e),
+    max: Math.max(...e),
     count: 0,
     hasIndex() {
       return -Infinity === this.max || this.values.has(this.count++);
@@ -40,11 +40,11 @@ function buildIndexesObject(e) {
 }
 
 class SearchResults {
-  constructor(e, t) {
-    this.string = e, this.searchSettings = t, this.prepareSearch();
+  constructor(t, e) {
+    this.string = t, this.searchSettings = e, this.prepareSearch();
   }
   prepareSearch() {
-    for (const e of [ this.searchSettings.separatorSearch, this.searchSettings.bracketsSearch ]) e.lastIndex = 0;
+    for (const t of [ this.searchSettings.separatorSearch, this.searchSettings.bracketsSearch ]) t.lastIndex = 0;
     Object.assign(this, {
       brackets: [],
       pipe: [],
@@ -63,46 +63,46 @@ class SearchResults {
   get pipeIsEmpty() {
     return isEmpty(this.pipe);
   }
-  getMentions(e, t) {
+  getMentions(t, e) {
     const r = [], s = [];
-    for (const n of this.currentMentions) n.index >= e && n.index < t ? r.push(n.mention) : s.push(n);
+    for (const n of this.currentMentions) n.index >= t && n.index < e ? r.push(n.mention) : s.push(n);
     return [ r.length && r, s ];
   }
-  trimResultText(e) {
-    return this.searchSettings.trimResult ? e.trim() : e;
+  trimResultText(t) {
+    return this.searchSettings.trimResult ? t.trim() : t;
   }
-  trimSeparatorText(e) {
-    return this.searchSettings.trimSeparators ? e.trim() : e;
+  trimSeparatorText(t) {
+    return this.searchSettings.trimSeparators ? t.trim() : t;
   }
-  checkSeparator(e) {
-    const {string: t} = this, {check: r, includePositions: s, mentions: n} = this.searchSettings;
-    let {0: i = "", index: a = t.length, searchWithinData: o} = null != e ? e : {};
-    const c = i.length, h = o ? o.openPosition : this.position;
-    let p = t.substring(h, a);
-    i || (this.isDone = !0), p = this.trimResultText(p), i = this.trimSeparatorText(i);
+  checkSeparator(t) {
+    const {string: e} = this, {check: r, includePositions: s, mentions: n} = this.searchSettings;
+    let {0: i = "", index: a = e.length, searchWithinData: o} = null != t ? t : {};
+    const c = i.length, p = o ? o.openPosition : this.position;
+    let h = e.substring(p, a);
+    i || (this.isDone = !0), h = this.trimResultText(h), i = this.trimSeparatorText(i);
     let l, u = o ? [ o.open, o.close ] : i;
-    if (s && (p = {
-      text: p,
-      position: h
+    if (s && (h = {
+      text: h,
+      position: p
     }, u = {
       text: u,
       position: a,
       isSeparator: !0
     }), n) {
-      p = "string" == typeof p ? {
-        text: p
-      } : p;
-      const [e, t] = this.getMentions(h, a);
-      e && (p.mentions = e, l = t);
+      h = "string" == typeof h ? {
+        text: h
+      } : h;
+      const [t, e] = this.getMentions(p, a);
+      t && (h.mentions = t, l = e);
     }
     if (r && i) {
-      const e = isNaN(this.tempPosition) ? h : this.tempPosition;
+      const t = isNaN(this.tempPosition) ? p : this.tempPosition;
       this.tempPosition = a + i.length;
       const s = this;
       if (!r({
-        getString: once((() => s.trimResultText(t.substring(e, a)))),
-        getTextAfter: once((() => t.substring(a + i.length))),
-        getMentions: once((() => s.getMentions(e, a)[0])),
+        getString: once((() => s.trimResultText(e.substring(t, a)))),
+        getTextAfter: once((() => e.substring(a + i.length))),
+        getMentions: once((() => s.getMentions(t, a)[0])),
         getSeparator: once((() => i)),
         get string() {
           return this.getString();
@@ -119,29 +119,29 @@ class SearchResults {
       })) return [];
       delete this.tempPosition;
     }
-    return l && (this.currentMentions = l), this.position = a + c, [ p, u, !0 ];
+    return l && (this.currentMentions = l), this.position = a + c, [ h, u, !0 ];
   }
-  pushToPipe(e) {
+  pushToPipe(t) {
     if (this.indexes) {
       if (!this.indexes.hasIndex()) return;
       this.indexes.isOverMax() && (this.isDone = !0);
     }
-    this.pipe.push(e);
+    this.pipe.push(t);
   }
-  addToPipe(e) {
-    let [t, r, s] = this.checkSeparator(e);
+  addToPipe(t) {
+    let [e, r, s] = this.checkSeparator(t);
     if (!s) return !1;
     switch (this.searchSettings.includeSeparatorMode) {
      case "SEPARATELY":
-      this.pushToPipe(t), r && this.pushToPipe(r);
+      this.pushToPipe(e), r && this.pushToPipe(r);
       break;
 
      case "LEFT":
-      this.pushToPipe([ t, r ]);
+      this.pushToPipe([ e, r ]);
       break;
 
      case "RIGHT":
-      !("object" == typeof t ? t.text : t) && !this.lastSeparator || this.pushToPipe([ this.lastSeparator, t ]), 
+      !("object" == typeof e ? e.text : e) && !this.lastSeparator || this.pushToPipe([ this.lastSeparator, e ]), 
       this.lastSeparator = r;
       break;
 
@@ -150,132 +150,134 @@ class SearchResults {
       break;
 
      default:
-      this.pushToPipe(t);
+      this.pushToPipe(e);
     }
     return !this.pipeIsEmpty;
   }
   findBrackets() {
-    const {searchString: e, brackets: t, freeArea: r, searchSettings: s} = this, {bracketsSearch: n, separatorSearch: i, searchWithin: a} = s, o = a ? () => this.pipeIsEmpty : () => ("number" != typeof r.start || r.start !== r.end) && !r.end;
+    const {searchString: t, brackets: e, freeArea: r, searchSettings: s} = this, {bracketsSearch: n, separatorSearch: i, searchWithin: a} = s, o = a ? () => this.pipeIsEmpty : () => ("number" != typeof r.start || r.start !== r.end) && !r.end;
     for (;o(); ) {
       var c;
-      const o = n.exec(e);
+      const o = n.exec(t);
       if (!o) {
         if (a || isNaN(r.start)) return !1;
-        r.end = e.length - 1;
+        r.end = t.length - 1;
         continue;
       }
-      const p = o[0], {close: l, ignoreMode: u, searchLevels: g} = (h = t)[h.length - 1] || {};
+      const h = o[0], {close: l, ignoreMode: u, searchLevels: g} = (p = e)[p.length - 1] || {};
       let f;
-      switch ((p === l ? 1 : u && 4) || (f = s.bracketsMap[p]) && 2 || (null === (c = s.mentions) || void 0 === c ? void 0 : c[p]) && 3) {
+      switch ((h === l ? 1 : u && 4) || (f = s.bracketsMap[h]) && 2 || (null === (c = s.mentions) || void 0 === c ? void 0 : c[h]) && 3) {
        case 1:
-        const e = t.pop();
-        a ? (!0 === g || g.includes(t.length + 1)) && this.addToPipe(Object.assign(o, {
-          searchWithinData: e
-        })) : isEmpty(t) && (r.start = o.index, i && i.lastIndex < r.start && (i.lastIndex = r.start));
+        const t = e.pop();
+        a ? (!0 === g || g.includes(e.length + 1)) && this.addToPipe(Object.assign(o, {
+          searchWithinData: t
+        })) : isEmpty(e) && (r.start = o.index, i && i.lastIndex < r.start && (i.lastIndex = r.start));
         break;
 
        case 2:
-        t.push({
+        e.push({
           ...f,
-          openPosition: o.index + p.length
-        }), 1 !== t.length || a || (r.end = o.index);
+          openPosition: o.index + h.length
+        }), 1 !== e.length || a || (r.end = o.index);
         break;
 
        case 3:
         this.currentMentions.push({
-          mention: s.mentions[p],
+          mention: s.mentions[h],
           index: o.index
         });
       }
     }
-    var h;
+    var p;
     return !0;
   }
-  findSeparator(e) {
-    const {searchString: t, freeArea: r} = this, {separatorSearch: s} = this.searchSettings;
+  findSeparator(t) {
+    const {searchString: e, freeArea: r} = this, {separatorSearch: s} = this.searchSettings;
     let n;
     for (;!n; ) {
-      if (e = e || s.exec(t)) if (e.index <= r.end) {
-        const t = e.index >= r.start && this.addToPipe(e);
-        if (e = null, !t) continue;
+      if (t = t || s.exec(e)) if (t.index <= r.end) {
+        const e = t.index >= r.start && this.addToPipe(t);
+        if (t = null, !e) continue;
       } else r.start = r.end = void 0; else this.addToPipe();
       n = !0;
     }
-    return e;
+    return t;
   }
   getNext() {
-    let e;
-    for (;this.pipeIsEmpty && !this.isDone; ) this.findBrackets() ? this.searchSettings.searchWithin || (e = this.findSeparator(e)) : this.isDone = !0;
+    let t;
+    for (;this.pipeIsEmpty && !this.isDone; ) this.findBrackets() ? this.searchSettings.searchWithin || (t = this.findSeparator(t)) : this.isDone = !0;
     return this.pipeIsEmpty ? null : this.pipe.shift();
   }
   getAll() {
     return [ ...this ];
   }
   getRest() {
-    const e = [];
-    let t;
-    for (;null !== (t = this.getNext()); ) e.push(t);
-    return e;
+    const t = [];
+    let e;
+    for (;null !== (e = this.getNext()); ) t.push(e);
+    return t;
   }
   * [Symbol.iterator]() {
     this.prepareSearch();
-    const e = this;
-    let t;
+    const t = this;
+    let e;
     do {
-      t = e.getNext(), null !== t && (yield t);
-    } while (null !== t);
+      e = t.getNext(), null !== e && (yield e);
+    } while (null !== e);
   }
 }
 
-function split(e, t) {
-  const r = this.merge(t);
-  let s = new SearchResults(e, r);
+function split(t, e) {
+  const r = this.merge(e);
+  let s = new SearchResults(t, r);
   return "number" == typeof r.indexes ? s.getNext() : r.returnIterator ? s : s.getAll();
 }
 
-const createSplitFunction = e => {
-  const t = split.bind(e);
-  return Object.assign(t, {
-    getOne(e, r, s = {}) {
+function createSplitFunction(t) {
+  const e = split.bind(t);
+  return Object.assign(e, {
+    getOne(t, r, s = {}) {
       if (isNaN(r)) throw new TypeError("second parameter of `getOne` function should be index");
-      return t(e, {
+      return e(t, {
         ...s,
         indexes: r
       });
     },
-    getFirst: (e, r = {}) => t(e, {
+    getFirst: (t, r = {}) => e(t, {
       ...r,
       indexes: 0
     }),
-    getIndexes(e, r, s = {}) {
+    getIndexes(t, r, s = {}) {
       if (!Array.isArray(r)) throw new TypeError("second parameter of `getOne` function should be array of indexes");
-      return t(e, {
+      return e(t, {
         ...s,
         indexes: r
       });
     },
-    getIterator: (e, r = {}) => t(e, {
+    getIterator: (t, r = {}) => e(t, {
       ...r,
       returnIterator: !0
     })
   });
-}, getSplitSmartlyArgs = (e, t) => {
-  if (null == e || !e.length) throw new RangeError("empty arguments");
-  if (3 === e.length) {
-    if (!t) return e;
-  } else if (1 === e.length) {
-    const t = first(e);
-    "string" == typeof t ? e.push(",", {}) : Array.isArray(t) ? (e.unshift(null), e.push({})) : "object" == typeof t && e.unshift(null, ",");
-  } else if (2 === e.length) "string" == typeof e[0] && e[1] instanceof RegExp || "string" == typeof e[1] || Array.isArray(e[1]) ? e.push({}) : e.unshift(null); else if (e.length > 3) throw new RangeError("Too many arguments passed to splitSmartly function!!!");
-  return t && (e[2] = {
-    ...e[2],
-    ...t
-  }), e;
-};
+}
+
+function getSplitSmartlyArgs(t, e) {
+  if (null == t || !t.length) throw new RangeError("empty arguments");
+  if (3 === t.length) {
+    if (!e) return t;
+  } else if (1 === t.length) {
+    const e = first(t);
+    "string" == typeof e ? t.push(",", {}) : Array.isArray(e) ? (t.unshift(null), t.push({})) : "object" == typeof e && t.unshift(null, ",");
+  } else if (2 === t.length) "string" == typeof t[0] && t[1] instanceof RegExp || "string" == typeof t[1] || Array.isArray(t[1]) ? t.push({}) : t.unshift(null); else if (t.length > 3) throw new RangeError("Too many arguments passed to splitSmartly function!!!");
+  return e && (t[2] = {
+    ...t[2],
+    ...e
+  }), t;
+}
 
 let r;
 
-const prepareSearch = (e, t) => {
+function prepareSearch(t, e) {
   const s = {
     brackets: [],
     mentions: [],
@@ -285,114 +287,98 @@ const prepareSearch = (e, t) => {
     trimResult: !0,
     trimSeparators: !1,
     defaultBrackets: [ [ "(", ")" ], [ "[", "]" ], [ "{", "}" ] ],
-    ...t,
-    separators: e,
+    ...e,
+    separators: t,
     init() {
-      return function initSettings(e) {
-        if (Array.isArray(e.mentions) || "string" == typeof e.mentions) {
-          const t = [ e.mentions ].flat().filter(Boolean).reduce(((t, r) => (t[e.ignoreCase ? r.toUpperCase() : r] = r, 
-          t)), {});
-          e.mentions = !isEmpty(t) && t;
+      return function initSettings(t) {
+        if (Array.isArray(t.mentions) || "string" == typeof t.mentions) {
+          const e = [ t.mentions ].flat().filter(Boolean).reduce(((e, r) => (e[t.ignoreCase ? r.toUpperCase() : r] = r, 
+          e)), {});
+          t.mentions = !isEmpty(e) && e;
         }
-        return e.createBracketsMap().createBracketsSearch().createSeparatorsSearch();
+        return t.createBracketsMap().createBracketsSearch().createSeparatorsSearch();
       }(this);
     },
-    merge(e) {
-      return function mergeSettings(e, t) {
-        return t ? (t = {
-          ...e,
-          ...t
-        }, [ "brackets", "mentions" ].some((e => e in t)) && t.init(), t) : e;
-      }(this, e);
+    merge(t) {
+      return function mergeSettings(t, e) {
+        return e ? (e = {
+          ...t,
+          ...e
+        }, [ "brackets", "mentions" ].some((t => t in e)) && e.init(), e) : t;
+      }(this, t);
     },
-    arrayToPattern: e => function arrayToPattern(e) {
-      var t;
-      return null !== (t = r) && void 0 !== t || (r = new Set(".{}[]^()+*?\\/$|".split(""))), 
-      e.map((e => e instanceof RegExp ? e.source : e.split("").map((e => r.has(e) ? "\\" + e : e)).join(""))).join("|");
-    }(e),
-    createRegExp: e => RegExp(e, "g"),
+    arrayToPattern: t => function arrayToPattern(t) {
+      var e;
+      return null !== (e = r) && void 0 !== e || (r = new Set(".{}[]^()+*?\\/$|".split(""))), 
+      t.map((t => t instanceof RegExp ? t.source : t.split("").map((t => r.has(t) ? "\\" + t : t)).join(""))).join("|");
+    }(t),
+    createRegExp: t => RegExp(t, "g"),
     createBracketsMap() {
-      return function createBracketsMap(e) {
-        let t = e.brackets = function normalizeBrackets(e, t) {
+      return function createBracketsMap(t) {
+        let e = t.brackets = function normalizeBrackets(t, e) {
           var r;
-          return !0 === e ? e = t.slice() : "object" != typeof e || Array.isArray(e) ? "string" == typeof e && (e = e.split(",").map((e => {
-            let t = e.trim().split(" ");
-            if (2 !== t.length) {
-              if (2 !== first(t).length) throw new TypeError("open and close parts of brackets should be separated by space symbol");
-              t = first(t).split("");
+          return !0 === t ? t = e.slice() : "object" != typeof t || Array.isArray(t) ? "string" == typeof t && (t = t.split(",").map((t => {
+            let e = t.trim().split(" ");
+            if (2 !== e.length) {
+              if (2 !== first(e).length) throw new TypeError("open and close parts of brackets should be separated by space symbol");
+              e = first(e).split("");
             }
-            return t;
-          }))) : e = Object.entries(e), null !== (r = e) && void 0 !== r ? r : [];
-        }(e.brackets, e.defaultBrackets);
-        return t = function handleBracketsMapOptions(e, t) {
-          return t.ignoreInsideQuotes && e.unshift([ "'", , , !0 ], [ '"', , , !0 ]), e;
-        }(t, e), e.bracketsMap = function buildBracketsMap(e, t) {
-          return e.reduce(((e, [r, s, ...n]) => {
-            1 !== n.length || t || n.unshift(void 0);
-            let [i = t && 1, a] = n;
-            return "number" == typeof i && (i = [ i ]), e[r] = {
+            return e;
+          }))) : t = Object.entries(t), null !== (r = t) && void 0 !== r ? r : [];
+        }(t.brackets, t.defaultBrackets);
+        return e = function handleBracketsMapOptions(t, e) {
+          return e.ignoreInsideQuotes && t.unshift([ "'", , , !0 ], [ '"', , , !0 ]), t;
+        }(e, t), t.bracketsMap = function buildBracketsMap(t, e) {
+          return t.reduce(((t, [r, s, ...n]) => {
+            1 !== n.length || e || n.unshift(void 0);
+            let [i = e && 1, a] = n;
+            return "number" == typeof i && (i = [ i ]), t[r] = {
               open: r,
               ignoreMode: a,
               searchLevels: i,
               close: s || r
-            }, e;
+            }, t;
           }), {});
-        }(t, e.searchWithin), e;
+        }(e, t.searchWithin), t;
       }(this);
     },
     createBracketsSearch() {
-      return function createBracketsSearch(e) {
-        const t = Object.entries(e.bracketsMap).flatMap((([, {close: e, open: t}]) => e !== t ? [ t, e ] : t)).concat(Object.keys(e.mentions || {})).filter(Boolean), r = e.arrayToPattern(t);
-        return e.bracketsSearch = e.createRegExp(r), e;
+      return function createBracketsSearch(t) {
+        const e = Object.entries(t.bracketsMap).flatMap((([, {close: t, open: e}]) => t !== e ? [ e, t ] : e)).concat(Object.keys(t.mentions || {})).filter(Boolean), r = t.arrayToPattern(e);
+        return t.bracketsSearch = t.createRegExp(r), t;
       }(this);
     },
     createSeparatorsSearch() {
-      return function createSeparatorsSearch(e) {
-        const {separators: t} = e;
-        if ("string" == typeof t || Array.isArray(t)) {
-          const r = e.arrayToPattern([ t ].flat().filter(Boolean));
-          e.separatorSearch = e.createRegExp(r);
-        } else t ? (e.separatorSearch = t, e.ignoreCase = t.ignoreCase) : e.separatorSearch = /empty/;
-        return e;
+      return function createSeparatorsSearch(t) {
+        const {separators: e} = t;
+        if ("string" == typeof e || Array.isArray(e)) {
+          const r = t.arrayToPattern([ e ].flat().filter(Boolean));
+          t.separatorSearch = t.createRegExp(r);
+        } else e ? (t.separatorSearch = e, t.ignoreCase = e.ignoreCase) : t.separatorSearch = /empty/;
+        return t;
       }(this);
     }
   };
   return s.init();
-};
+}
 
-function _splitSmartlyCore(e, t) {
-  const r = prepareSearch(e, t);
+function _splitSmartlyCore(t, e) {
+  const r = prepareSearch(t, e);
   return {
     splitSettings: r,
     splitFn: createSplitFunction(r)
   };
 }
 
-function splitSmartly(...e) {
-  let [t, r, s] = getSplitSmartlyArgs(e);
+function splitSmartly(...t) {
+  let [e, r, s] = getSplitSmartlyArgs(t);
   const {splitFn: n} = _splitSmartlyCore(r, s);
-  return null !== t ? n(t) : n;
+  return null !== e ? n(e) : n;
 }
 
-function searchWithin(...e) {
-  return 1 === e.length && ("string" == typeof e[0] ? e.push(null, {}) : e.unshift(null)), 
-  "object" == typeof e[1] && e[1].brackets || (e[1] = {
-    brackets: e[1]
-  }), e.splice(1, 0, null), splitSmartly(...getSplitSmartlyArgs(e, {
-    searchWithin: !0
-  }));
-}
-
-function search(...e) {
-  return splitSmartly(...getSplitSmartlyArgs(e, {
-    includeSeparatorMode: "ONLY"
-  }));
-}
-
-splitSmartly.searchWithin = searchWithin, splitSmartly.search = search, exports.SearchResults = SearchResults, 
-exports._splitSmartlyCore = _splitSmartlyCore, exports.createSplitFunction = createSplitFunction, 
-exports.default = splitSmartly, exports.getSplitSmartlyArgs = getSplitSmartlyArgs, 
-exports.newDefaultBrackets = function newDefaultBrackets() {
+exports.SearchResults = SearchResults, exports._splitSmartlyCore = _splitSmartlyCore, 
+exports.createSplitFunction = createSplitFunction, exports.default = splitSmartly, 
+exports.getSplitSmartlyArgs = getSplitSmartlyArgs, exports.newDefaultBrackets = function newDefaultBrackets() {
   return [ [ "(", ")" ], [ "[", "]" ], [ "{", "}" ] ];
 }, exports.newDefaultSettings = function newDefaultSettings() {
   return {
@@ -405,6 +391,16 @@ exports.newDefaultBrackets = function newDefaultBrackets() {
     trimSeparators: !1,
     defaultBrackets: [ [ "(", ")" ], [ "[", "]" ], [ "{", "}" ] ]
   };
-}, exports.prepareSearch = prepareSearch, exports.search = search, exports.searchWithin = searchWithin, 
-exports.splitSmartly = splitSmartly;
+}, exports.prepareSearch = prepareSearch, exports.search = function search(...t) {
+  return splitSmartly(...getSplitSmartlyArgs(t, {
+    includeSeparatorMode: "ONLY"
+  }));
+}, exports.searchWithin = function searchWithin(...t) {
+  return 1 === t.length && ("string" == typeof t[0] ? t.push(null, {}) : t.unshift(null)), 
+  "object" == typeof t[1] && t[1].brackets || (t[1] = {
+    brackets: t[1]
+  }), t.splice(1, 0, null), splitSmartly(...getSplitSmartlyArgs(t, {
+    searchWithin: !0
+  }));
+}, exports.splitSmartly = splitSmartly;
 //# sourceMappingURL=index.cjs.production.min.cjs.map

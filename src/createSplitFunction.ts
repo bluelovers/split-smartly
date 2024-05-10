@@ -10,7 +10,7 @@ import {
 import { split } from './split';
 import { SearchResults } from './searchResults';
 
-export const createSplitFunction = <M extends IIncludeSeparatorMode>(settings: ISearchSettingsInput<M>): ISplitFunction<M> =>
+export function createSplitFunction<M extends IIncludeSeparatorMode>(settings: ISearchSettingsInput<M>): ISplitFunction<M>
 {
 	const splitFn = split.bind(settings as ISplitSettings<M>) as unknown as ISplitFunctionCore<M> & ThisType<ISplitSettings<M>>
 

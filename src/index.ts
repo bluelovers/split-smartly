@@ -72,14 +72,14 @@ export function searchWithin<M extends IIncludeSeparatorMode>(...args: IParamete
 	return splitSmartly(...getSplitSmartlyArgs<M>(args as any, { searchWithin: true })) as string[]
 }
 
-splitSmartly.searchWithin = searchWithin;
+//splitSmartly.searchWithin = searchWithin;
 
 export function search(...args: IParametersSplitSmartly<EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_ONLY>)
 {
 	return splitSmartly(...getSplitSmartlyArgs(args, { includeSeparatorMode: EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_ONLY }))
 }
 
-splitSmartly.search = search;
+//splitSmartly.search = search;
 
 /*
 export const INCLUDE_SEPARATOR_NONE = EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_NONE

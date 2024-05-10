@@ -202,13 +202,13 @@ export type IReturnTypeCheckSeparator = [
 	separator: ISeparatorsNode,
 	checked: boolean
 ];
-export declare const createSplitFunction: <M extends IIncludeSeparatorMode>(settings: ISearchSettingsInput<M>) => ISplitFunction<M>;
-export declare const getSplitSmartlyArgs: <M extends IIncludeSeparatorMode, M2 extends IIncludeSeparatorMode = M>(args: IParametersSplitSmartly<M>, extraSettings?: ISplitSettingsInput<M2>) => [
+export declare function createSplitFunction<M extends IIncludeSeparatorMode>(settings: ISearchSettingsInput<M>): ISplitFunction<M>;
+export declare function getSplitSmartlyArgs<M extends IIncludeSeparatorMode, M2 extends IIncludeSeparatorMode = M>(args: IParametersSplitSmartly<M>, extraSettings?: ISplitSettingsInput<M2>): [
 	string,
 	ISeparators,
 	ISplitSettings<M2>
 ];
-export declare const prepareSearch: <M extends IIncludeSeparatorMode>(separators: ISeparators, settings: ISplitSettingsInput<M>) => ISplitSettings<M>;
+export declare function prepareSearch<M extends IIncludeSeparatorMode>(separators: ISeparators, settings: ISplitSettingsInput<M>): ISplitSettings<M>;
 export declare function newDefaultBrackets(): [
 	[
 		"(",
@@ -239,10 +239,6 @@ export declare function _splitSmartlyCore<M extends IIncludeSeparatorMode>(separ
 };
 export declare function splitSmartly<M extends IIncludeSeparatorMode>(...args: IParametersSplitSmartlyReturnQuery<M>): ISplitFunction<M>;
 export declare function splitSmartly<M extends IIncludeSeparatorMode>(...args: IParametersSplitSmartlyReturnResult<M>): IGetPipeItemByIncludeSeparatorMode<M> | IGetPipeItemByIncludeSeparatorMode<M>[];
-export declare namespace splitSmartly {
-	var searchWithin: typeof searchWithin;
-	var search: typeof search;
-}
 export declare function searchWithin<M extends IIncludeSeparatorMode>(...args: IParametersSplitSmartly<M> | [
 	string,
 	IBracketsInput

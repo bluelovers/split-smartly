@@ -1,4 +1,4 @@
-import { splitSmartly } from './index'
+import { searchWithin, splitSmartly } from './index'
 import { EnumIncludeSeparatorMode } from './types';
 
 const numbersText = `1, 2 (3, 4), "5,6"`
@@ -91,10 +91,10 @@ test('test settings props 2', () =>
 	})
 	expect(res).toEqual('param1, param2, param3')
 
-	let res2 = splitSmartly.searchWithin('1, 2 (3, 4), 5, (6, 7)', { '(': ')' })
+	let res2 = searchWithin('1, 2 (3, 4), 5, (6, 7)', { '(': ')' })
 	expect(res2).toEqual(['3, 4', '6, 7'])
 
-	res2 = splitSmartly.searchWithin('1, 2 (3, 4), 5, {6, 7}', '{}')
+	res2 = searchWithin('1, 2 (3, 4), 5, {6, 7}', '{}')
 	expect(res2).toEqual(['6, 7'])
 })
 

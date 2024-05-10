@@ -12,9 +12,9 @@ import { mergeSettings } from './util/mergeSettings';
 import { initSettings } from './util/initSettings';
 import { newDefaultSettings } from './util/newDefaultSettings';
 
-export const prepareSearch = <M extends IIncludeSeparatorMode>(separators: ISeparators,
+export function prepareSearch<M extends IIncludeSeparatorMode>(separators: ISeparators,
 	settings: ISplitSettingsInput<M>,
-) =>
+)
 {
 	const splitSettings: ISplitSettings<M> = {
 		...newDefaultSettings() as ISplitSettings<M>,

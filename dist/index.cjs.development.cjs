@@ -352,7 +352,7 @@ function split(string, settings) {
   return res;
 }
 
-const createSplitFunction = settings => {
+function createSplitFunction(settings) {
   const splitFn = split.bind(settings);
   return Object.assign(splitFn, {
     getOne(string, index, settings = {}) {
@@ -390,9 +390,9 @@ const createSplitFunction = settings => {
       });
     }
   });
-};
+}
 
-const getSplitSmartlyArgs = (args, extraSettings) => {
+function getSplitSmartlyArgs(args, extraSettings) {
   if (!(args !== null && args !== void 0 && args.length)) {
     throw new RangeError('empty arguments');
   } else if (args.length === 3) {
@@ -427,7 +427,7 @@ const getSplitSmartlyArgs = (args, extraSettings) => {
     ...extraSettings
   };
   return args;
-};
+}
 
 let screenedSymbols;
 function arrayToPattern(arr) {
@@ -564,7 +564,7 @@ function newDefaultSettings() {
   };
 }
 
-const prepareSearch = (separators, settings) => {
+function prepareSearch(separators, settings) {
   const splitSettings = {
     ...newDefaultSettings(),
     ...settings,
@@ -592,7 +592,7 @@ const prepareSearch = (separators, settings) => {
     }
   };
   return splitSettings.init();
-};
+}
 
 function _splitSmartlyCore(separators, settings) {
   const splitSettings = prepareSearch(separators, settings);
@@ -630,13 +630,11 @@ function searchWithin(...args) {
     searchWithin: true
   }));
 }
-splitSmartly.searchWithin = searchWithin;
 function search(...args) {
   return splitSmartly(...getSplitSmartlyArgs(args, {
     includeSeparatorMode: "ONLY" /* EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_ONLY */
   }));
 }
-splitSmartly.search = search;
 
 exports.SearchResults = SearchResults;
 exports._splitSmartlyCore = _splitSmartlyCore;

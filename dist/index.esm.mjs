@@ -75,22 +75,22 @@ class SearchResults {
     const {string: e} = this, {check: r, includePositions: s, mentions: n} = this.searchSettings;
     let {0: i = "", index: a = e.length, searchWithinData: o} = null != t ? t : {};
     const c = i.length, h = o ? o.openPosition : this.position;
-    let l = e.substring(h, a);
-    i || (this.isDone = !0), l = this.trimResultText(l), i = this.trimSeparatorText(i);
-    let p, u = o ? [ o.open, o.close ] : i;
-    if (s && (l = {
-      text: l,
+    let p = e.substring(h, a);
+    i || (this.isDone = !0), p = this.trimResultText(p), i = this.trimSeparatorText(i);
+    let l, u = o ? [ o.open, o.close ] : i;
+    if (s && (p = {
+      text: p,
       position: h
     }, u = {
       text: u,
       position: a,
       isSeparator: !0
     }), n) {
-      l = "string" == typeof l ? {
-        text: l
-      } : l;
+      p = "string" == typeof p ? {
+        text: p
+      } : p;
       const [t, e] = this.getMentions(h, a);
-      t && (l.mentions = t, p = e);
+      t && (p.mentions = t, l = e);
     }
     if (r && i) {
       const t = isNaN(this.tempPosition) ? h : this.tempPosition;
@@ -116,7 +116,7 @@ class SearchResults {
       })) return [];
       delete this.tempPosition;
     }
-    return p && (this.currentMentions = p), this.position = a + c, [ l, u, !0 ];
+    return l && (this.currentMentions = l), this.position = a + c, [ p, u, !0 ];
   }
   pushToPipe(t) {
     if (this.indexes) {
@@ -161,9 +161,9 @@ class SearchResults {
         r.end = t.length - 1;
         continue;
       }
-      const l = o[0], {close: p, ignoreMode: u, searchLevels: g} = (h = e)[h.length - 1] || {};
+      const p = o[0], {close: l, ignoreMode: u, searchLevels: g} = (h = e)[h.length - 1] || {};
       let f;
-      switch ((l === p ? 1 : u && 4) || (f = s.bracketsMap[l]) && 2 || (null === (c = s.mentions) || void 0 === c ? void 0 : c[l]) && 3) {
+      switch ((p === l ? 1 : u && 4) || (f = s.bracketsMap[p]) && 2 || (null === (c = s.mentions) || void 0 === c ? void 0 : c[p]) && 3) {
        case 1:
         const t = e.pop();
         a ? (!0 === g || g.includes(e.length + 1)) && this.addToPipe(Object.assign(o, {
@@ -174,13 +174,13 @@ class SearchResults {
        case 2:
         e.push({
           ...f,
-          openPosition: o.index + l.length
+          openPosition: o.index + p.length
         }), 1 !== e.length || a || (r.end = o.index);
         break;
 
        case 3:
         this.currentMentions.push({
-          mention: s.mentions[l],
+          mention: s.mentions[p],
           index: o.index
         });
       }
@@ -230,7 +230,7 @@ function split(t, e) {
   return "number" == typeof r.indexes ? s.getNext() : r.returnIterator ? s : s.getAll();
 }
 
-const createSplitFunction = t => {
+function createSplitFunction(t) {
   const e = split.bind(t);
   return Object.assign(e, {
     getOne(t, r, s = {}) {
@@ -256,7 +256,9 @@ const createSplitFunction = t => {
       returnIterator: !0
     })
   });
-}, getSplitSmartlyArgs = (t, e) => {
+}
+
+function getSplitSmartlyArgs(t, e) {
   if (null == t || !t.length) throw new RangeError("empty arguments");
   if (3 === t.length) {
     if (!e) return t;
@@ -268,7 +270,7 @@ const createSplitFunction = t => {
     ...t[2],
     ...e
   }), t;
-};
+}
 
 let r;
 
@@ -289,7 +291,7 @@ function newDefaultSettings() {
   };
 }
 
-const prepareSearch = (t, e) => {
+function prepareSearch(t, e) {
   const s = {
     brackets: [],
     mentions: [],
@@ -372,7 +374,7 @@ const prepareSearch = (t, e) => {
     }
   };
   return s.init();
-};
+}
 
 function _splitSmartlyCore(t, e) {
   const r = prepareSearch(t, e);
@@ -402,8 +404,6 @@ function search(...t) {
     includeSeparatorMode: "ONLY"
   }));
 }
-
-splitSmartly.searchWithin = searchWithin, splitSmartly.search = search;
 
 export { t as EnumIncludeSeparatorMode, SearchResults, _splitSmartlyCore, createSplitFunction, splitSmartly as default, getSplitSmartlyArgs, newDefaultBrackets, newDefaultSettings, prepareSearch, search, searchWithin, splitSmartly };
 //# sourceMappingURL=index.esm.mjs.map
