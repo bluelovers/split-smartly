@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.16](https://github.com/bluelovers/split-smartly/compare/split-smartly2@1.1.15...split-smartly2@1.1.16) (2024-05-10)
+
+
+
+### 📦　Code Refactoring
+
+* split newDefaultBracket ([3ced854](https://github.com/bluelovers/split-smartly/commit/3ced8544143bc8fd194c2b9c6d268ec9a0d5130f))
+* update build ([bfb1714](https://github.com/bluelovers/split-smartly/commit/bfb17147903b2bbbc00b9570451328d1f1b72928))
+
+
+### 🚨　Tests
+
+* test a1111 ([f2c8772](https://github.com/bluelovers/split-smartly/commit/f2c8772a91962fd113d3c3a0b4d91affb3a88bbf))
+
+
+### 📌　Dependencies
+
+* update deps ([fff7600](https://github.com/bluelovers/split-smartly/commit/fff7600be78019d6e9fc6ac17b934eb126f46ff4))
+
+
+
 ## [1.1.15](https://github.com/bluelovers/split-smartly/compare/split-smartly2@1.1.14...split-smartly2@1.1.15) (2023-10-22)
 
 **Note:** Version bump only for package split-smartly2
