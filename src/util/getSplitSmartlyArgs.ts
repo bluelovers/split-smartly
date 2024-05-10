@@ -57,7 +57,7 @@ export const getSplitSmartlyArgs = <M extends IIncludeSeparatorMode, M2 extends 
 	}
 	else if (args.length > 3)
 	{
-		throw new RangeError('Too much arguments passed to splitSmartly function!!!')
+		throw new RangeError('Too many arguments passed to splitSmartly function!!!')
 	}
 
 	// @ts-ignore

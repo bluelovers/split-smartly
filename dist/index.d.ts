@@ -1,3 +1,4 @@
+import { ITSTypeAndStringLiteral } from 'ts-type/lib/helper/string';
 import { ITSValueOrArray } from 'ts-type/lib/type/base';
 
 export declare class SearchResults<M extends IIncludeSeparatorMode, T extends IGetPipeItemByIncludeSeparatorMode<IIncludeSeparatorMode> = IGetPipeItemBySettings<ISearchSettingsInput<M>>> {
@@ -114,6 +115,13 @@ export interface IMention {
 	index: number;
 	mention: string;
 }
+export type IPipeItem = string | [
+	string,
+	ISeparators
+] | [
+	ISeparators,
+	string
+] | ISeparators;
 export interface IPipeItemMap {
 	[EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_SEPARATELY]: string;
 	[EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_LEFT]: [
@@ -129,7 +137,7 @@ export interface IPipeItemMap {
 export type IGetPipeItemByIncludeSeparatorMode<M extends IIncludeSeparatorMode> = M extends EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_ONLY ? IPipeItemMap[EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_ONLY] : M extends EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_RIGHT ? IPipeItemMap[EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_RIGHT] : M extends EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_LEFT ? IPipeItemMap[EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_LEFT] : IPipeItemMap[EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_SEPARATELY];
 export type IGetIncludeSeparatorModeBySettings<T extends ISearchSettingsInput<IIncludeSeparatorMode>> = T extends ISearchSettingsInput<infer M> ? M : IIncludeSeparatorMode;
 export type IGetPipeItemBySettings<T extends ISearchSettingsInput<IIncludeSeparatorMode>> = IGetPipeItemByIncludeSeparatorMode<IGetIncludeSeparatorModeBySettings<T>>;
-export type IIncludeSeparatorMode = EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_NONE | EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_SEPARATELY | EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_LEFT | EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_RIGHT | EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_ONLY;
+export type IIncludeSeparatorMode = ITSTypeAndStringLiteral<EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_NONE | EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_SEPARATELY | EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_LEFT | EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_RIGHT | EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_ONLY>;
 export type ISeparators = ITSValueOrArray<string | RegExp>;
 export type ISeparatorsNode = ISeparators | ITextNodeSeparator;
 export interface ITextNodeBase {
@@ -142,6 +150,13 @@ export interface ITextNodeSeparator extends Omit<ITextNodeBase, "isSeparator" | 
 	text: ISeparators;
 	position: number;
 	isSeparator: true;
+}
+export type ITextNodeOrText = string | ITextNodeBase | ITextNodeSeparator;
+export declare const enum EnumFindBracketsAction {
+	ACTION_CLOSE = 1,
+	ACTION_OPEN = 2,
+	ACTION_ADD_FRAGMENT = 3,
+	ACTION_NULL = 4
 }
 export type IParametersSplitSmartlyReturnQuery<M extends IIncludeSeparatorMode> = [
 	Exclude<ISeparators, string>,
@@ -188,15 +203,27 @@ export type IReturnTypeCheckSeparator = [
 	checked: boolean
 ];
 export declare const createSplitFunction: <M extends IIncludeSeparatorMode>(settings: ISearchSettingsInput<M>) => ISplitFunction<M>;
+export declare const getSplitSmartlyArgs: <M extends IIncludeSeparatorMode, M2 extends IIncludeSeparatorMode = M>(args: IParametersSplitSmartly<M>, extraSettings?: ISplitSettingsInput<M2>) => [
+	string,
+	ISeparators,
+	ISplitSettings<M2>
+];
+export declare const prepareSearch: <M extends IIncludeSeparatorMode>(separators: ISeparators, settings: ISplitSettingsInput<M>) => ISplitSettings<M>;
+export declare function _splitSmartlyCore<M extends IIncludeSeparatorMode>(separators: ISeparators, settings: ISplitSettings<M>): {
+	splitSettings: ISplitSettings<M>;
+	splitFn: ISplitFunction<M>;
+};
 export declare function splitSmartly<M extends IIncludeSeparatorMode>(...args: IParametersSplitSmartlyReturnQuery<M>): ISplitFunction<M>;
 export declare function splitSmartly<M extends IIncludeSeparatorMode>(...args: IParametersSplitSmartlyReturnResult<M>): IGetPipeItemByIncludeSeparatorMode<M> | IGetPipeItemByIncludeSeparatorMode<M>[];
 export declare namespace splitSmartly {
-	var searchWithin: <M extends IIncludeSeparatorMode>(...args: IParametersSplitSmartly<M> | [
-		string,
-		IBracketsInput
-	]) => string[];
-	var search: (...args: IParametersSplitSmartly<EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_ONLY>) => ISeparators | ISeparators[];
+	var searchWithin: typeof searchWithin;
+	var search: typeof search;
 }
+export declare function searchWithin<M extends IIncludeSeparatorMode>(...args: IParametersSplitSmartly<M> | [
+	string,
+	IBracketsInput
+]): string[];
+export declare function search(...args: IParametersSplitSmartly<EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_ONLY>): ISeparators | ISeparators[];
 
 export {
 	splitSmartly as default,

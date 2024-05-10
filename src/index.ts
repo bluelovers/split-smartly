@@ -6,30 +6,46 @@ import {
 	IParametersSplitSmartly,
 	IParametersSplitSmartlyReturnQuery,
 	IParametersSplitSmartlyReturnResult,
+	ISeparators,
 	ISplitFunction,
+	ISplitSettings,
 } from "./types"
+import { createSplitFunction } from './createSplitFunction';
 import { getSplitSmartlyArgs } from './util/getSplitSmartlyArgs';
 import { prepareSearch } from './prepareSearch';
-import { SearchResults } from './searchResults';
-import { createSplitFunction } from './createSplitFunction';
 
-export { SearchResults, createSplitFunction, getSplitSmartlyArgs, prepareSearch }
-export { EnumIncludeSeparatorMode } from "./types"
+export { SearchResults } from './searchResults';
+
+export { createSplitFunction, getSplitSmartlyArgs, prepareSearch }
+export { EnumIncludeSeparatorMode }
+export type *  from "./types"
+
+export function _splitSmartlyCore<M extends IIncludeSeparatorMode>(separators: ISeparators, settings: ISplitSettings<M>)
+{
+	const splitSettings = prepareSearch(separators, settings)
+	const splitFn = createSplitFunction(splitSettings)
+
+	return {
+		splitSettings,
+		splitFn,
+	}
+}
 
 export function splitSmartly<M extends IIncludeSeparatorMode>(...args: IParametersSplitSmartlyReturnQuery<M>): ISplitFunction<M>
 export function splitSmartly<M extends IIncludeSeparatorMode>(...args: IParametersSplitSmartlyReturnResult<M>): IGetPipeItemByIncludeSeparatorMode<M> | IGetPipeItemByIncludeSeparatorMode<M>[]
 export function splitSmartly<M extends IIncludeSeparatorMode>(...args: IParametersSplitSmartly<M>): ISplitFunction<M> | IGetPipeItemByIncludeSeparatorMode<M> | IGetPipeItemByIncludeSeparatorMode<M>[]
 {
-	let [string, separators, settings] = getSplitSmartlyArgs(args as any)
+	let [str, separators, settings] = getSplitSmartlyArgs<M, M>(args as any)
 
-	const splitSettings = prepareSearch(separators, settings)
-	const splitFn = createSplitFunction(splitSettings)
+	const {
+		splitFn,
+	} = _splitSmartlyCore(separators, settings);
 
 	// @ts-ignore
-	return string !== null ? splitFn(string) : splitFn
+	return str !== null ? splitFn(str) : splitFn
 }
 
-splitSmartly.searchWithin = <M extends IIncludeSeparatorMode>(...args: IParametersSplitSmartly<M> | [string, IBracketsInput]) =>
+export function searchWithin<M extends IIncludeSeparatorMode>(...args: IParametersSplitSmartly<M> | [string, IBracketsInput])
 {
 	if (args.length === 1)
 	{
@@ -55,10 +71,14 @@ splitSmartly.searchWithin = <M extends IIncludeSeparatorMode>(...args: IParamete
 	return splitSmartly(...getSplitSmartlyArgs<M>(args as any, { searchWithin: true })) as string[]
 }
 
-splitSmartly.search = (...args: IParametersSplitSmartly<EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_ONLY>) =>
+splitSmartly.searchWithin = searchWithin;
+
+export function search(...args: IParametersSplitSmartly<EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_ONLY>)
 {
 	return splitSmartly(...getSplitSmartlyArgs(args, { includeSeparatorMode: EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_ONLY }))
 }
+
+splitSmartly.search = search;
 
 /*
 export const INCLUDE_SEPARATOR_NONE = EnumIncludeSeparatorMode.INCLUDE_SEPARATOR_NONE

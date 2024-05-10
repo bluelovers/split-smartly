@@ -1,3 +1,13 @@
+var t, e;
+
+!function(t) {
+  t.INCLUDE_SEPARATOR_NONE = "NONE", t.INCLUDE_SEPARATOR_SEPARATELY = "SEPARATELY", 
+  t.INCLUDE_SEPARATOR_LEFT = "LEFT", t.INCLUDE_SEPARATOR_RIGHT = "RIGHT", t.INCLUDE_SEPARATOR_ONLY = "ONLY";
+}(t || (t = {})), function(t) {
+  t[t.ACTION_CLOSE = 1] = "ACTION_CLOSE", t[t.ACTION_OPEN = 2] = "ACTION_OPEN", t[t.ACTION_ADD_FRAGMENT = 3] = "ACTION_ADD_FRAGMENT", 
+  t[t.ACTION_NULL = 4] = "ACTION_NULL";
+}(e || (e = {}));
+
 const once = t => {
   let e, r;
   return function(...s) {
@@ -9,106 +19,7 @@ const once = t => {
     if (0 === t.length) return !0;
   } else if ("object" == typeof t && 0 === Object.keys(t).length) return !0;
   return !1;
-}, first = t => t[0], getSplitSmartlyArgs = (t, e) => {
-  if (null == t || !t.length) throw new RangeError("empty arguments");
-  if (3 === t.length) {
-    if (!e) return t;
-  } else if (1 === t.length) {
-    const e = first(t);
-    "string" == typeof e ? t.push(",", {}) : Array.isArray(e) ? (t.unshift(null), t.push({})) : "object" == typeof e && t.unshift(null, ",");
-  } else if (2 === t.length) "string" == typeof t[0] && t[1] instanceof RegExp || "string" == typeof t[1] || Array.isArray(t[1]) ? t.push({}) : t.unshift(null); else if (t.length > 3) throw new RangeError("Too much arguments passed to splitSmartly function!!!");
-  return e && (t[2] = {
-    ...t[2],
-    ...e
-  }), t;
-};
-
-let t;
-
-const prepareSearch = (e, r) => {
-  const s = {
-    brackets: [],
-    mentions: [],
-    ignoreInsideQuotes: !0,
-    includeSeparatorMode: "NONE",
-    ignoreCase: !0,
-    trimResult: !0,
-    trimSeparators: !1,
-    defaultBrackets: [ [ "(", ")" ], [ "[", "]" ], [ "{", "}" ] ],
-    ...r,
-    separators: e,
-    init() {
-      return function initSettings(t) {
-        if (Array.isArray(t.mentions) || "string" == typeof t.mentions) {
-          const e = [ t.mentions ].flat().filter(Boolean).reduce(((e, r) => (e[t.ignoreCase ? r.toUpperCase() : r] = r, 
-          e)), {});
-          t.mentions = !isEmpty(e) && e;
-        }
-        return t.createBracketsMap().createBracketsSearch().createSeparatorsSearch();
-      }(this);
-    },
-    merge(t) {
-      return function mergeSettings(t, e) {
-        return e ? (e = {
-          ...t,
-          ...e
-        }, [ "brackets", "mentions" ].some((t => t in e)) && e.init(), e) : t;
-      }(this, t);
-    },
-    arrayToPattern: e => function arrayToPattern(e) {
-      var r;
-      return null !== (r = t) && void 0 !== r || (t = new Set(".{}[]^()+*?\\/$|".split(""))), 
-      e.map((e => e instanceof RegExp ? e.source : e.split("").map((e => t.has(e) ? "\\" + e : e)).join(""))).join("|");
-    }(e),
-    createRegExp: t => RegExp(t, "g"),
-    createBracketsMap() {
-      return function createBracketsMap(t) {
-        let e = t.brackets = function normalizeBrackets(t, e) {
-          var r;
-          return !0 === t ? t = e.slice() : "object" != typeof t || Array.isArray(t) ? "string" == typeof t && (t = t.split(",").map((t => {
-            let e = t.trim().split(" ");
-            if (2 !== e.length) {
-              if (2 !== first(e).length) throw new TypeError("open and close parts of brackets should be separated by space symbol");
-              e = first(e).split("");
-            }
-            return e;
-          }))) : t = Object.entries(t), null !== (r = t) && void 0 !== r ? r : [];
-        }(t.brackets, t.defaultBrackets);
-        return e = function handleBracketsMapOptions(t, e) {
-          return e.ignoreInsideQuotes && t.unshift([ "'", , , !0 ], [ '"', , , !0 ]), t;
-        }(e, t), t.bracketsMap = function buildBracketsMap(t, e) {
-          return t.reduce(((t, [r, s, ...n]) => {
-            1 !== n.length || e || n.unshift(void 0);
-            let [i = e && 1, a] = n;
-            return "number" == typeof i && (i = [ i ]), t[r] = {
-              open: r,
-              ignoreMode: a,
-              searchLevels: i,
-              close: s || r
-            }, t;
-          }), {});
-        }(e, t.searchWithin), t;
-      }(this);
-    },
-    createBracketsSearch() {
-      return function createBracketsSearch(t) {
-        const e = Object.entries(t.bracketsMap).flatMap((([, {close: t, open: e}]) => t !== e ? [ e, t ] : e)).concat(Object.keys(t.mentions || {})).filter(Boolean), r = t.arrayToPattern(e);
-        return t.bracketsSearch = t.createRegExp(r), t;
-      }(this);
-    },
-    createSeparatorsSearch() {
-      return function createSeparatorsSearch(t) {
-        const {separators: e} = t;
-        if ("string" == typeof e || Array.isArray(e)) {
-          const r = t.arrayToPattern([ e ].flat().filter(Boolean));
-          t.separatorSearch = t.createRegExp(r);
-        } else e ? (t.separatorSearch = e, t.ignoreCase = e.ignoreCase) : t.separatorSearch = /empty/;
-        return t;
-      }(this);
-    }
-  };
-  return s.init();
-};
+}, first = t => t[0];
 
 function buildIndexesObject(t) {
   const e = [ t ].flat().filter(Boolean);
@@ -345,30 +256,137 @@ const createSplitFunction = t => {
       returnIterator: !0
     })
   });
+}, getSplitSmartlyArgs = (t, e) => {
+  if (null == t || !t.length) throw new RangeError("empty arguments");
+  if (3 === t.length) {
+    if (!e) return t;
+  } else if (1 === t.length) {
+    const e = first(t);
+    "string" == typeof e ? t.push(",", {}) : Array.isArray(e) ? (t.unshift(null), t.push({})) : "object" == typeof e && t.unshift(null, ",");
+  } else if (2 === t.length) "string" == typeof t[0] && t[1] instanceof RegExp || "string" == typeof t[1] || Array.isArray(t[1]) ? t.push({}) : t.unshift(null); else if (t.length > 3) throw new RangeError("Too many arguments passed to splitSmartly function!!!");
+  return e && (t[2] = {
+    ...t[2],
+    ...e
+  }), t;
 };
 
-var e, r;
+let r;
+
+const prepareSearch = (t, e) => {
+  const s = {
+    brackets: [],
+    mentions: [],
+    ignoreInsideQuotes: !0,
+    includeSeparatorMode: "NONE",
+    ignoreCase: !0,
+    trimResult: !0,
+    trimSeparators: !1,
+    defaultBrackets: [ [ "(", ")" ], [ "[", "]" ], [ "{", "}" ] ],
+    ...e,
+    separators: t,
+    init() {
+      return function initSettings(t) {
+        if (Array.isArray(t.mentions) || "string" == typeof t.mentions) {
+          const e = [ t.mentions ].flat().filter(Boolean).reduce(((e, r) => (e[t.ignoreCase ? r.toUpperCase() : r] = r, 
+          e)), {});
+          t.mentions = !isEmpty(e) && e;
+        }
+        return t.createBracketsMap().createBracketsSearch().createSeparatorsSearch();
+      }(this);
+    },
+    merge(t) {
+      return function mergeSettings(t, e) {
+        return e ? (e = {
+          ...t,
+          ...e
+        }, [ "brackets", "mentions" ].some((t => t in e)) && e.init(), e) : t;
+      }(this, t);
+    },
+    arrayToPattern: t => function arrayToPattern(t) {
+      var e;
+      return null !== (e = r) && void 0 !== e || (r = new Set(".{}[]^()+*?\\/$|".split(""))), 
+      t.map((t => t instanceof RegExp ? t.source : t.split("").map((t => r.has(t) ? "\\" + t : t)).join(""))).join("|");
+    }(t),
+    createRegExp: t => RegExp(t, "g"),
+    createBracketsMap() {
+      return function createBracketsMap(t) {
+        let e = t.brackets = function normalizeBrackets(t, e) {
+          var r;
+          return !0 === t ? t = e.slice() : "object" != typeof t || Array.isArray(t) ? "string" == typeof t && (t = t.split(",").map((t => {
+            let e = t.trim().split(" ");
+            if (2 !== e.length) {
+              if (2 !== first(e).length) throw new TypeError("open and close parts of brackets should be separated by space symbol");
+              e = first(e).split("");
+            }
+            return e;
+          }))) : t = Object.entries(t), null !== (r = t) && void 0 !== r ? r : [];
+        }(t.brackets, t.defaultBrackets);
+        return e = function handleBracketsMapOptions(t, e) {
+          return e.ignoreInsideQuotes && t.unshift([ "'", , , !0 ], [ '"', , , !0 ]), t;
+        }(e, t), t.bracketsMap = function buildBracketsMap(t, e) {
+          return t.reduce(((t, [r, s, ...n]) => {
+            1 !== n.length || e || n.unshift(void 0);
+            let [i = e && 1, a] = n;
+            return "number" == typeof i && (i = [ i ]), t[r] = {
+              open: r,
+              ignoreMode: a,
+              searchLevels: i,
+              close: s || r
+            }, t;
+          }), {});
+        }(e, t.searchWithin), t;
+      }(this);
+    },
+    createBracketsSearch() {
+      return function createBracketsSearch(t) {
+        const e = Object.entries(t.bracketsMap).flatMap((([, {close: t, open: e}]) => t !== e ? [ e, t ] : e)).concat(Object.keys(t.mentions || {})).filter(Boolean), r = t.arrayToPattern(e);
+        return t.bracketsSearch = t.createRegExp(r), t;
+      }(this);
+    },
+    createSeparatorsSearch() {
+      return function createSeparatorsSearch(t) {
+        const {separators: e} = t;
+        if ("string" == typeof e || Array.isArray(e)) {
+          const r = t.arrayToPattern([ e ].flat().filter(Boolean));
+          t.separatorSearch = t.createRegExp(r);
+        } else e ? (t.separatorSearch = e, t.ignoreCase = e.ignoreCase) : t.separatorSearch = /empty/;
+        return t;
+      }(this);
+    }
+  };
+  return s.init();
+};
+
+function _splitSmartlyCore(t, e) {
+  const r = prepareSearch(t, e);
+  return {
+    splitSettings: r,
+    splitFn: createSplitFunction(r)
+  };
+}
 
 function splitSmartly(...t) {
   let [e, r, s] = getSplitSmartlyArgs(t);
-  const n = prepareSearch(r, s), i = createSplitFunction(n);
-  return null !== e ? i(e) : i;
+  const {splitFn: n} = _splitSmartlyCore(r, s);
+  return null !== e ? n(e) : n;
 }
 
-!function(t) {
-  t.INCLUDE_SEPARATOR_NONE = "NONE", t.INCLUDE_SEPARATOR_SEPARATELY = "SEPARATELY", 
-  t.INCLUDE_SEPARATOR_LEFT = "LEFT", t.INCLUDE_SEPARATOR_RIGHT = "RIGHT", t.INCLUDE_SEPARATOR_ONLY = "ONLY";
-}(e || (e = {})), function(t) {
-  t[t.ACTION_CLOSE = 1] = "ACTION_CLOSE", t[t.ACTION_OPEN = 2] = "ACTION_OPEN", t[t.ACTION_ADD_FRAGMENT = 3] = "ACTION_ADD_FRAGMENT", 
-  t[t.ACTION_NULL = 4] = "ACTION_NULL";
-}(r || (r = {})), splitSmartly.searchWithin = (...t) => (1 === t.length && ("string" == typeof t[0] ? t.push(null, {}) : t.unshift(null)), 
-"object" == typeof t[1] && t[1].brackets || (t[1] = {
-  brackets: t[1]
-}), t.splice(1, 0, null), splitSmartly(...getSplitSmartlyArgs(t, {
-  searchWithin: !0
-}))), splitSmartly.search = (...t) => splitSmartly(...getSplitSmartlyArgs(t, {
-  includeSeparatorMode: "ONLY"
-}));
+function searchWithin(...t) {
+  return 1 === t.length && ("string" == typeof t[0] ? t.push(null, {}) : t.unshift(null)), 
+  "object" == typeof t[1] && t[1].brackets || (t[1] = {
+    brackets: t[1]
+  }), t.splice(1, 0, null), splitSmartly(...getSplitSmartlyArgs(t, {
+    searchWithin: !0
+  }));
+}
 
-export { e as EnumIncludeSeparatorMode, SearchResults, createSplitFunction, splitSmartly as default, getSplitSmartlyArgs, prepareSearch, splitSmartly };
+function search(...t) {
+  return splitSmartly(...getSplitSmartlyArgs(t, {
+    includeSeparatorMode: "ONLY"
+  }));
+}
+
+splitSmartly.searchWithin = searchWithin, splitSmartly.search = search;
+
+export { t as EnumIncludeSeparatorMode, SearchResults, _splitSmartlyCore, createSplitFunction, splitSmartly as default, getSplitSmartlyArgs, prepareSearch, search, searchWithin, splitSmartly };
 //# sourceMappingURL=index.esm.mjs.map

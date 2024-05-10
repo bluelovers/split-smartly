@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`arguments.length > 3 1`] = `"Too much arguments passed to splitSmartly function!!!"`;
+exports[`arguments.length > 3 1`] = `"Too many arguments passed to splitSmartly function!!!"`;
 
 exports[`arguments.length 0 1`] = `"empty arguments"`;
 
